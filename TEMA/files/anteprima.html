@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il collante, anteprima del tema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* ==========================================================================
+   Il collante, tema v1
+   Titoli: Bricolage Grotesque. Testo: Source Serif 4. Codice: monospazio di sistema.
+   Colori: carta grigio freddo, inchiostro blu notte, sole (ambra), rete (blu), piano (verde petrolio).
+   Il tema chiaro/scuro segue il dispositivo. Per forzarlo: <html data-theme="light|dark">.
+   Indice: 1 Token, 2 Base, 3 Testata e piede, 4 Bottoni e iscrizione, 5 Hero e grafico,
+   6 Numeri, 7 Articoli e copertine, 8 Progetti, 9 Chi scrive, 10 Serie, 11 Articolo, 12 Fondo articolo
+   ========================================================================== */
+
+/* 1. Token ---------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+  --paper: #E9EEF2;
+  --surface: #F6F8FA;
+  --ink: #13202C;
+  --muted: #526476;
+  --rule: #C7D2DB;
+  --sun: #E9A100;
+  --sun-ink: #8A5800;
+  --grid: #1D5F8E;
+  --plan: #0A6F5E;
+  --on-plan: #FFFFFF;
+
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --maxw: 1180px;
+  --measure: 66ch;
+  --radius: 6px;
+  --radius-s: 4px;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1A25;
+    --surface: #14232F;
+    --ink: #E8EEF3;
+    --muted: #93A5B6;
+    --rule: #263746;
+    --sun: #F5B324;
+    --sun-ink: #F5B324;
+    --grid: #6DB2E8;
+    --plan: #45C7AE;
+    --on-plan: #08211C;
+  }
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0E1A25;
+  --surface: #14232F;
+  --ink: #E8EEF3;
+  --muted: #93A5B6;
+  --rule: #263746;
+  --sun: #F5B324;
+  --sun-ink: #F5B324;
+  --grid: #6DB2E8;
+  --plan: #45C7AE;
+  --on-plan: #08211C;
+}
+
+/* 2. Base ----------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 1rem); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-optical-sizing: auto;
+}
+img, svg { max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--grid); }
+:focus-visible { outline: 2px solid var(--grid); outline-offset: 3px; }
+::selection { background: var(--sun); color: #13202C; }
+h1, h2, h3, h4 { font-family: var(--f-display); margin: 0; color: var(--ink); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: clamp(1.25rem, 4vw, 2.5rem); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .5rem 1rem; z-index: 10; }
+.skip:focus { left: 1rem; top: 1rem; }
+
+/* Categorie: un colore per argomento. Si usa su .cat e su .cover */
+.c-energia { --c: var(--sun); }
+.c-ottim { --c: var(--plan); }
+.c-proto { --c: var(--grid); }
+.c-sist { --c: var(--ink); }
+
+/* 3. Testata e piede ------------------------------------------------------ */
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem 1.5rem; padding-block: 1.5rem; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; font-variation-settings: "wdth" 80; text-decoration: none; }
+.brand:hover { color: var(--ink); }
+.nav { display: flex; gap: 1.5rem; flex-wrap: wrap; font-family: var(--f-display); font-weight: 500; font-size: 1rem; }
+.nav a { text-decoration: none; padding-block: .25rem; border-bottom: 2px solid transparent; }
+.nav a:hover, .nav a[aria-current="page"] { border-bottom-color: var(--sun); color: var(--ink); }
+
+.foot { display: flex; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; padding-block: 2.5rem 3rem; border-top: 1px solid var(--rule); font-family: var(--f-display); font-size: .95rem; line-height: 1.5; color: var(--muted); }
+.foot nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+
+/* 4. Bottoni e iscrizione ------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: .6rem 1.25rem;
+  border: 1px solid var(--ink); border-radius: var(--radius-s);
+  background: var(--ink); color: var(--paper);
+  font-family: var(--f-display); font-weight: 600; font-size: 1rem; line-height: 1;
+  text-decoration: none; cursor: pointer;
+}
+.btn:hover { background: var(--grid); border-color: var(--grid); color: var(--paper); }
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.subscribe { background: var(--surface); border: 1px solid var(--rule); border-top: 4px solid var(--ink); border-radius: var(--radius); padding: 1.5rem; }
+.subscribe h3 { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.01em; font-variation-settings: "wdth" 88; }
+.subscribe p { margin: .5rem 0 1rem; font-size: 1rem; color: var(--muted); max-width: 52ch; }
+.subscribe form { display: flex; gap: .6rem; flex-wrap: wrap; }
+.subscribe input[type="email"] {
+  flex: 1 1 14rem; min-height: 44px; padding: .6rem .85rem;
+  border: 1px solid var(--ink); border-radius: var(--radius-s);
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: 1rem;
+}
+.subscribe input::placeholder { color: var(--muted); }
+.subscribe .fine { margin: .85rem 0 0; font-family: var(--f-display); font-size: .85rem; line-height: 1.4; color: var(--muted); }
+/* Variante compatta per l'hero: senza riquadro e senza titolo */
+.subscribe--inline { background: none; border: 0; border-radius: 0; padding: 0; margin-top: 1.75rem; max-width: 30rem; }
+.subscribe--inline .fine { margin-top: .6rem; }
+
+/* 5. Hero e grafico ------------------------------------------------------- */
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 4vw, 3.5rem); align-items: center; padding-block: clamp(2rem, 6vw, 4.5rem) clamp(2.5rem, 6vw, 4rem); }
+.hero h1 { font-weight: 800; font-size: clamp(2.7rem, 5.6vw, 4.6rem); line-height: .98; letter-spacing: -0.025em; font-variation-settings: "wdth" 76, "opsz" 96; text-wrap: balance; }
+.hero-lead { max-width: 36ch; margin: 1.5rem 0 0; font-size: 1.25rem; line-height: 1.55; }
+.hero-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.25rem; font-family: var(--f-display); font-weight: 600; font-size: 1rem; }
+
+.chart { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.1rem 1rem 1rem; }
+.chart-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem 1rem; flex-wrap: wrap; margin: 0 .25rem .9rem; font-family: var(--f-display); }
+.chart-head strong { font-weight: 700; font-size: 1.05rem; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart figcaption { margin: 1rem .25rem 0; font-size: .95rem; line-height: 1.5; color: var(--muted); max-width: 62ch; }
+.status { display: inline-flex; align-items: center; gap: .45rem; font-family: var(--f-display); font-weight: 500; font-size: .9rem; line-height: 1; color: var(--muted); }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--plan); }
+
+.gl { stroke: var(--rule); stroke-width: 1; }
+.mark { stroke: var(--plan); stroke-width: 1; stroke-dasharray: 3 4; opacity: .6; }
+.tick { fill: var(--muted); font: 500 13px var(--f-display); }
+.pv-area { fill: var(--sun); fill-opacity: .24; }
+.pv-line { fill: none; stroke: var(--sun); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.ld-line { fill: none; stroke: var(--grid); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.sp { fill: var(--plan); fill-opacity: .28; }
+.track { fill: var(--rule); fill-opacity: .55; }
+.ev { fill: var(--plan); }
+.ev-t { fill: var(--on-plan); font: 700 14px var(--f-display); }
+.lbl { font: 600 15px var(--f-display); }
+.lbl-sun { fill: var(--sun-ink); }
+.lbl-grid { fill: var(--grid); }
+.lbl-plan { fill: var(--plan); }
+.lbl-ink { fill: var(--ink); }
+
+/* Un solo momento di movimento: il grafico si disegna all'apertura */
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.7s cubic-bezier(.3, .6, .3, 1) .2s forwards; }
+.fadein { opacity: 0; animation: fade .9s ease-out 1.2s forwards; }
+.fadein.late { animation-delay: 1.9s; }
+@media (prefers-reduced-motion: reduce) {
+  .draw { animation: none; stroke-dashoffset: 0; }
+  .fadein, .fadein.late { animation: none; opacity: 1; }
+}
+
+/* 6. Numeri --------------------------------------------------------------- */
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding-block: 2rem; border-block: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; margin: 0; }
+.stat dd { margin: 0; }
+.stat-n { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.4rem, 5.2vw, 3.8rem); line-height: 1; letter-spacing: -0.03em; font-variation-settings: "wdth" 76, "opsz" 96; }
+.stat-n .u { margin-left: .3em; font-size: .4em; font-weight: 600; letter-spacing: 0; color: var(--muted); font-variation-settings: "wdth" 90; }
+.stat-l { order: 2; margin-top: .5rem; font-family: var(--f-display); font-weight: 500; font-size: .95rem; line-height: 1.35; color: var(--muted); }
+
+/* 7. Articoli e copertine ------------------------------------------------- */
+.sec { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
+.sec h2 { font-weight: 700; font-size: clamp(1.7rem, 3vw, 2.2rem); letter-spacing: -0.015em; font-variation-settings: "wdth" 85; }
+.sec-head { display: flex; justify-content: space-between; align-items: end; gap: 1rem 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.sec-lead { margin: .5rem 0 0; color: var(--muted); font-size: 1.05rem; }
+
+.filters { display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: var(--f-display); font-size: .95rem; }
+.filters button { all: unset; cursor: pointer; padding: .2rem 0; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 500; }
+.filters button:hover { color: var(--ink); }
+.filters button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--sun); font-weight: 600; }
+.filters button:focus-visible { outline: 2px solid var(--grid); outline-offset: 3px; }
+
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.1rem; font-family: var(--f-display); font-weight: 500; font-size: .9rem; line-height: 1.3; color: var(--muted); }
+.cat { display: inline-flex; align-items: center; gap: .5rem; }
+.cat i { width: 9px; height: 9px; border-radius: 2px; background: var(--c, var(--ink)); flex: none; }
+
+/* Copertina: foto reale se presente, altrimenti fondo a quadretti con il colore della categoria */
+.cover {
+  --c: var(--ink);
+  position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--rule) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--rule) 70%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.cover::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: var(--c); }
+.cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cover-tag { position: absolute; left: .9rem; bottom: 1.3rem; display: inline-flex; align-items: center; gap: .5rem; padding: .15rem .65rem; background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; font-family: var(--f-display); font-weight: 700; font-size: .9rem; line-height: 1.5; color: var(--ink); }
+.cover-tag::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--c); }
+
+.articles { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.featured { border-top: 4px solid var(--ink); padding-top: 1.25rem; }
+.featured .cover { margin-bottom: 1.25rem; }
+.featured h3 { margin-top: .75rem; font-weight: 700; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.08; letter-spacing: -0.02em; font-variation-settings: "wdth" 85; }
+.featured h3 a { text-decoration: none; }
+.featured h3 a:hover { text-decoration: underline; }
+.featured p { margin: 1rem 0; }
+.more { display: inline-block; margin-top: .5rem; font-family: var(--f-display); font-weight: 600; }
+
+.list { display: grid; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding-block: 1.4rem; border-top: 1px solid var(--rule); }
+.item:first-child { border-top-color: var(--ink); }
+.item.has-cover { grid-template-columns: 11rem minmax(0, 1fr); gap: 1.25rem; }
+.item[hidden] { display: none; }
+.item h3 { margin: 0 0 .4rem; font-weight: 600; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; font-variation-settings: "wdth" 90; }
+.item h3 a { text-decoration: none; }
+.item h3 a:hover { text-decoration: underline; }
+.item p { margin: 0 0 .7rem; font-size: 1rem; line-height: 1.55; color: var(--muted); max-width: 60ch; }
+
+/* 8. Progetti ------------------------------------------------------------- */
+.projects-list { border-top: 1px solid var(--ink); }
+.project { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1.25rem 2rem; padding-block: 1.9rem; border-bottom: 1px solid var(--rule); }
+/* Lo spazio a sinistra accoglie un numero (25,05) o una parola chiave (OCR, ZFS, RTSP) */
+.project-num { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.2rem, 4.4vw, 3rem); line-height: 1; letter-spacing: -0.03em; font-variation-settings: "wdth" 76, "opsz" 96; }
+.project-num small { display: block; margin-top: .55rem; font-weight: 500; font-size: .9rem; line-height: 1.3; letter-spacing: 0; color: var(--muted); font-variation-settings: normal; }
+.project h3 { margin: .5rem 0 0; font-weight: 700; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.015em; font-variation-settings: "wdth" 88; }
+.project h3 a { text-decoration: none; }
+.project h3 a:hover { text-decoration: underline; }
+.project p { margin: .6rem 0 1rem; font-size: 1.05rem; max-width: 62ch; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.tags li { padding: .1rem .6rem; border: 1px solid var(--rule); border-radius: 3px; font-family: var(--f-display); font-weight: 500; font-size: .85rem; line-height: 1.5; color: var(--muted); }
+
+/* 9. Chi scrive ----------------------------------------------------------- */
+.about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); }
+.about p { margin: 0 0 1rem; max-width: 60ch; }
+.about-links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem; }
+
+/* 10. Serie --------------------------------------------------------------- */
+.series { margin: 0 0 2rem; padding: 1rem 1.25rem 1.1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); font-family: var(--f-display); }
+.series-title { margin: 0; font-weight: 600; font-size: 1rem; }
+.series-title a { text-decoration: none; }
+.series-title small { margin-left: .6rem; color: var(--muted); font-weight: 500; font-size: .9rem; }
+.series-bar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; margin: .8rem 0 0; padding: 0; list-style: none; }
+.series-bar li { height: 6px; border-radius: 2px; background: var(--rule); }
+.series-bar li.done { background: var(--sun); }
+.series-bar li.now { background: var(--ink); }
+.series-list { margin: 1rem 0 0; padding: 0; list-style: none; counter-reset: ep; font-size: .95rem; }
+.series-list li { counter-increment: ep; display: flex; gap: .75rem; padding: .4rem 0; border-top: 1px solid var(--rule); }
+.series-list li::before { content: counter(ep); width: 1.1rem; font-weight: 700; color: var(--muted); }
+.series-list li[aria-current] { font-weight: 700; }
+.series-list a { text-decoration: none; }
+.series-list a:hover { text-decoration: underline; }
+
+/* 11. Articolo ------------------------------------------------------------ */
+.post-layout { display: grid; grid-template-columns: minmax(0, var(--measure)); justify-content: center; gap: 2rem 4rem; padding-block: 2.5rem 1rem; }
+.post-main { min-width: 0; }
+@media (min-width: 1100px) {
+  .post-layout { grid-template-columns: minmax(0, var(--measure)) 14rem; }
+  .post-main { grid-column: 1; grid-row: 1; }
+  .toc { grid-column: 2; grid-row: 1; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 1.5rem); align-self: start; }
+}
+.post-head h1 { font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.02; letter-spacing: -0.025em; font-variation-settings: "wdth" 80, "opsz" 80; text-wrap: balance; }
+.post-head .meta { margin: 1.1rem 0 1.75rem; }
+.prose .lede { margin: 0 0 2rem; font-size: 1.35rem; line-height: 1.55; }
+
+.toc { font-family: var(--f-display); font-size: .9rem; line-height: 1.35; }
+.toc summary { cursor: pointer; font-weight: 700; font-size: .95rem; margin-bottom: .6rem; }
+.toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--rule); }
+.toc a { display: block; margin-left: -1px; padding: .3rem 0 .3rem .9rem; border-left: 2px solid transparent; text-decoration: none; color: var(--muted); }
+.toc a:hover, .toc a[aria-current] { color: var(--ink); border-left-color: var(--sun); }
+
+.prose p, .prose ul, .prose ol { margin: 0 0 1.25rem; font-size: 1.2rem; line-height: 1.7; }
+.prose h2 { margin: 3rem 0 1rem; font-weight: 700; font-size: 1.8rem; line-height: 1.15; letter-spacing: -0.015em; font-variation-settings: "wdth" 86; }
+.prose h3 { margin: 2.25rem 0 .75rem; font-weight: 700; font-size: 1.35rem; line-height: 1.2; font-variation-settings: "wdth" 88; }
+.prose li { margin-bottom: .4rem; }
+.prose a { color: var(--grid); }
+.prose a:hover { color: var(--ink); }
+.prose img { display: block; height: auto; border-radius: var(--radius); }
+.prose code { padding: .05em .35em; background: var(--surface); border: 1px solid var(--rule); border-radius: 3px; font-family: var(--f-code); font-size: .86em; }
+.prose pre { margin: 1.75rem 0; padding: 1.1rem 1.25rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow-x: auto; font-family: var(--f-code); font-size: .92rem; line-height: 1.65; tab-size: 2; }
+.prose pre code { padding: 0; background: none; border: 0; font-size: inherit; }
+
+/* Blocco di codice con pulsante copia: <div class="codeblock"><button class="copy">…</button><pre>…</pre></div> */
+.codeblock { position: relative; margin: 1.75rem 0; }
+.codeblock pre { margin: 0; padding-top: 2.6rem; }
+.codeblock .lang { position: absolute; top: .65rem; left: 1.25rem; font-family: var(--f-display); font-weight: 500; font-size: .8rem; color: var(--muted); }
+.copy { position: absolute; top: .5rem; right: .5rem; min-height: 32px; padding: .2rem .75rem; background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; color: var(--ink); font-family: var(--f-display); font-weight: 600; font-size: .8rem; cursor: pointer; }
+.copy:hover { border-color: var(--ink); }
+
+/* Frame di un protocollo scomposto nei campi */
+.frame { margin: 2rem 0; padding: 1.25rem 1.25rem 1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow-x: auto; }
+.frame-row { display: flex; gap: 1.1rem; min-width: max-content; }
+.field { --fc: var(--ink); padding-top: .6rem; border-top: 3px solid var(--fc); }
+.field .b { display: block; font-family: var(--f-code); font-weight: 600; font-size: 1.2rem; letter-spacing: .06em; white-space: nowrap; }
+.field .n { display: block; margin-top: .3rem; font-family: var(--f-display); font-size: .85rem; line-height: 1.25; color: var(--muted); }
+.f1 { --fc: var(--ink); }
+.f2 { --fc: var(--sun); }
+.f3 { --fc: var(--grid); }
+.f4 { --fc: var(--plan); }
+.f5 { --fc: var(--muted); }
+.prose .frame-cap { margin: 1rem 0 0; font-family: var(--f-display); font-size: .9rem; line-height: 1.4; color: var(--muted); }
+
+.note { margin: 2rem 0; padding: .25rem 0 .25rem 1.25rem; border-left: 3px solid var(--grid); }
+.prose .note p { margin: 0; font-style: italic; font-size: 1.15rem; }
+.note b { font-family: var(--f-display); font-style: normal; font-weight: 700; }
+
+.eq { margin: 1.5rem 0 2rem; padding: 1.1rem 1.25rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow-x: auto; font-family: var(--f-code); font-size: .95rem; line-height: 1.75; white-space: pre; }
+
+/* 12. Fondo articolo ------------------------------------------------------ */
+.post-end { display: grid; gap: 2.5rem; margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--ink); }
+.next { display: block; padding: 1.25rem 0; border-block: 1px solid var(--rule); text-decoration: none; }
+.next small { display: block; font-family: var(--f-display); font-weight: 500; font-size: .9rem; color: var(--muted); }
+.next strong { display: block; margin-top: .25rem; font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.015em; font-variation-settings: "wdth" 88; }
+.next:hover strong { color: var(--grid); }
+.discuss { display: flex; justify-content: space-between; align-items: center; gap: 1rem 2rem; flex-wrap: wrap; }
+.discuss p { margin: 0; max-width: 44ch; }
+
+/* Adattamenti ------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero, .articles, .about { grid-template-columns: minmax(0, 1fr); }
+  .hero-lead { max-width: 46ch; }
+  .project { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .nav { gap: 1.1rem; }
+  .stats { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .item.has-cover { grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1rem; }
+  .item.has-cover .cover { aspect-ratio: 1; }
+  .item.has-cover .cover-tag { display: none; }
+}
+
+</style>
+<style>
+/* Solo per l'anteprima, non fa parte del tema */
+.pv-banner { padding: .75rem 0; background: var(--ink); color: var(--paper); font-family: var(--f-display); font-size: .9rem; }
+.pv-banner .wrap { display: flex; justify-content: space-between; gap: .5rem 1.5rem; flex-wrap: wrap; }
+.pv-banner a { color: var(--paper); }
+.pv-divider { margin-top: 3rem; }
+</style>
+</head>
+<body>
+<a class="skip" href="#articoli">Vai agli articoli</a>
+
+<div class="pv-banner"><div class="wrap"><span>Anteprima del tema, parte 1: la home. Testi di esempio.</span><a href="#pagina-articolo">Vai alla pagina articolo</a></div></div>
+
+<!-- ============================== HOME ============================== -->
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">Il collante</a>
+    <nav class="nav" aria-label="Principale">
+      <a href="#articoli">Articoli</a>
+      <a href="#progetti">Progetti</a>
+      <a href="#chi-scrive">Chi scrive</a>
+      <a href="#">RSS</a>
+    </nav>
+  </header>
+
+  <section class="hero" aria-labelledby="titolo">
+    <div>
+      <h1 id="titolo">Disegno l'architettura. L'IA scrive il codice.</h1>
+      <p class="hero-lead">Appunti da un integratore di sistemi: energia, ottimizzazione, ESP32, protocolli, e come far lavorare insieme sistemisti e sviluppatori.</p>
+
+      <div class="subscribe subscribe--inline">
+        <form class="js-sub" action="#" method="post">
+          <label class="sr" for="email-hero">La tua email</label>
+          <input id="email-hero" type="email" name="email" placeholder="La tua email" autocomplete="email" required>
+          <button class="btn" type="submit">Iscriviti</button>
+        </form>
+        <p class="fine">Un'email quando esce un nuovo articolo. Nient'altro.</p>
+      </div>
+      <div class="hero-links">
+        <a href="#progetti">Esplora i progetti</a>
+        <a href="#">Segui via RSS</a>
+      </div>
+    </div>
+
+    <figure class="chart">
+      <div class="chart-head">
+        <strong>Una giornata del mio impianto</strong>
+        <span class="status">dati illustrativi</span>
+      </div>
+      
+<svg viewBox="0 0 760 316" role="img" aria-labelledby="chart-t chart-d" xmlns="http://www.w3.org/2000/svg">
+  <title id="chart-t">Un giorno di produzione, consumi e ricarica dell'auto</title>
+  <desc id="chart-d">La produzione fotovoltaica prevista sale fino a circa 5 kW a metà giornata. Il consumo della casa resta sotto 1 kW di giorno e sale a 2 kW la sera. Il solver assegna la ricarica dell'auto da 3,7 kW dalle 11 alle 15, quando il sole produce più di quanto la casa consuma.</desc>
+  <line class="gl" x1="48" x2="740" y1="240.0" y2="240.0"/><text class="tick" x="40" y="244.0" text-anchor="end">0</text><line class="gl" x1="48" x2="740" y1="166.7" y2="166.7"/><text class="tick" x="40" y="170.7" text-anchor="end">2</text><line class="gl" x1="48" x2="740" y1="93.3" y2="93.3"/><text class="tick" x="40" y="97.3" text-anchor="end">4</text><line class="gl" x1="48" x2="740" y1="20.0" y2="20.0"/><text class="tick" x="40" y="24.0" text-anchor="end">6</text><text class="tick" x="40" y="12" text-anchor="end">kW</text><text class="tick" x="48.0" y="306" text-anchor="middle">00</text><text class="tick" x="221.0" y="306" text-anchor="middle">06</text><text class="tick" x="394.0" y="306" text-anchor="middle">12</text><text class="tick" x="567.0" y="306" text-anchor="middle">18</text><text class="tick" x="740.0" y="306" text-anchor="middle">24</text>
+  <line class="mark" x1="365.2" x2="365.2" y1="20" y2="282"/>
+  <line class="mark" x1="480.5" x2="480.5" y1="20" y2="282"/>
+  <path class="pv-area fadein" d="M221.0,240.0 L228.2,237.5 L235.4,232.9 L242.6,226.9 L249.8,220.0 L257.0,212.2 L264.2,203.8 L271.5,194.9 L278.7,185.5 L285.9,175.9 L293.1,166.0 L300.3,156.1 L307.5,146.1 L314.7,136.3 L321.9,126.6 L329.1,117.2 L336.3,108.2 L343.5,99.6 L350.8,91.4 L358.0,83.9 L365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L487.7,84.1 L494.9,92.3 L502.1,101.8 L509.3,112.6 L516.5,123.9 L523.8,134.4 L531.0,143.2 L538.2,150.9 L545.4,158.5 L552.6,167.0 L559.8,176.2 L567.0,185.6 L574.2,194.9 L581.4,203.8 L588.6,212.2 L595.8,220.0 L603.0,226.9 L610.2,232.9 L617.5,237.5 L624.7,240.0 L624.7,240.0 L221.0,240.0 Z"/>
+  <path class="sp fadein late" d="M365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L480.5,218.0 L473.3,218.4 L466.1,218.7 L458.9,218.6 L451.7,218.0 L444.5,216.6 L437.2,214.6 L430.0,212.4 L422.8,210.7 L415.6,209.1 L408.4,207.7 L401.2,206.8 L394.0,207.0 L386.8,209.0 L379.6,212.3 L372.4,215.7 L365.2,218.0 Z"/>
+  <path class="pv-line draw" pathLength="1" d="M221.0,240.0 L228.2,237.5 L235.4,232.9 L242.6,226.9 L249.8,220.0 L257.0,212.2 L264.2,203.8 L271.5,194.9 L278.7,185.5 L285.9,175.9 L293.1,166.0 L300.3,156.1 L307.5,146.1 L314.7,136.3 L321.9,126.6 L329.1,117.2 L336.3,108.2 L343.5,99.6 L350.8,91.4 L358.0,83.9 L365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L487.7,84.1 L494.9,92.3 L502.1,101.8 L509.3,112.6 L516.5,123.9 L523.8,134.4 L531.0,143.2 L538.2,150.9 L545.4,158.5 L552.6,167.0 L559.8,176.2 L567.0,185.6 L574.2,194.9 L581.4,203.8 L588.6,212.2 L595.8,220.0 L603.0,226.9 L610.2,232.9 L617.5,237.5 L624.7,240.0"/>
+  <path class="ld-line draw" pathLength="1" d="M48.0,223.5 L55.2,223.9 L62.4,224.4 L69.6,225.0 L76.8,225.3 L84.0,225.5 L91.2,225.4 L98.5,225.4 L105.7,225.3 L112.9,225.3 L120.1,225.3 L127.3,225.3 L134.5,225.3 L141.7,225.4 L148.9,225.6 L156.1,225.6 L163.3,225.3 L170.5,224.9 L177.8,224.4 L185.0,223.4 L192.2,221.7 L199.4,218.8 L206.6,215.0 L213.8,210.9 L221.0,207.0 L228.2,202.8 L235.4,198.3 L242.6,194.5 L249.8,192.3 L257.0,192.4 L264.2,194.2 L271.5,196.8 L278.7,199.7 L285.9,203.1 L293.1,207.2 L300.3,211.3 L307.5,214.3 L314.7,216.1 L321.9,217.1 L329.1,217.6 L336.3,218.0 L343.5,218.5 L350.8,218.9 L358.0,218.9 L365.2,218.0 L372.4,215.7 L379.6,212.3 L386.8,209.0 L394.0,207.0 L401.2,206.8 L408.4,207.7 L415.6,209.1 L422.8,210.7 L430.0,212.4 L437.2,214.6 L444.5,216.6 L451.7,218.0 L458.9,218.6 L466.1,218.7 L473.3,218.4 L480.5,218.0 L487.7,217.5 L494.9,216.9 L502.1,215.9 L509.3,214.3 L516.5,212.4 L523.8,210.0 L531.0,207.0 L538.2,203.3 L545.4,198.5 L552.6,192.8 L559.8,186.8 L567.0,181.3 L574.2,176.1 L581.4,171.0 L588.6,166.5 L595.8,163.0 L603.0,160.5 L610.2,158.9 L617.5,158.4 L624.7,159.3 L631.9,162.2 L639.1,166.7 L646.3,172.1 L653.5,177.7 L660.7,183.8 L667.9,190.7 L675.1,197.5 L682.3,203.3 L689.5,208.0 L696.8,211.9 L704.0,215.2 L711.2,218.0 L718.4,220.1 L725.6,221.7 L732.8,222.7 L740.0,223.5"/>
+  <text class="lbl lbl-sun" x="356" y="50" text-anchor="end">Produzione prevista</text>
+  <text class="lbl lbl-grid" x="640" y="136" text-anchor="middle">Consumo casa</text>
+  <text class="lbl lbl-plan fadein late" x="422.8" y="146" text-anchor="middle">surplus</text>
+  <rect class="track" x="48" y="254" width="692" height="28" rx="3"/>
+  <g class="fadein late">
+    <rect class="ev" x="365.2" y="254" width="115.3" height="28" rx="3"/>
+    <text class="ev-t" x="422.8" y="273" text-anchor="middle">3,7 kW</text>
+    <text class="lbl lbl-ink" x="492.5" y="273">Ricarica auto, scelta dal solver</text>
+  </g>
+</svg>
+
+      <figcaption>Il solver MILP assegna la ricarica dell'auto alle ore in cui il sole produce più di quanto la casa consuma. Con i dati reali cambia l'etichetta in alto a destra in "impianto reale" e indica la data.</figcaption>
+    </figure>
+  </section>
+
+  <dl class="stats" aria-label="L'impianto in numeri">
+    <div class="stat"><dt class="stat-l">fotovoltaico installato</dt><dd class="stat-n">25,05<span class="u">kWp</span></dd></div>
+    <div class="stat"><dt class="stat-l">accumulo LiFePO4</dt><dd class="stat-n">36<span class="u">kWh</span></dd></div>
+    <div class="stat"><dt class="stat-l">inverter, in isola e in rete</dt><dd class="stat-n">2</dd></div>
+  </dl>
+
+  <section class="sec" id="articoli" aria-labelledby="h-articoli" style="border-top:0">
+    <div class="sec-head">
+      <h2 id="h-articoli">Ultimi articoli</h2>
+      <div class="filters" role="group" aria-label="Filtra per argomento">
+        <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+        <button type="button" data-f="energia" aria-pressed="false">Energia</button>
+        <button type="button" data-f="ottim" aria-pressed="false">Ottimizzazione</button>
+        <button type="button" data-f="proto" aria-pressed="false">Protocolli ed embedded</button>
+        <button type="button" data-f="sist" aria-pressed="false">Sistemi e IA</button>
+      </div>
+    </div>
+
+    <div class="articles">
+      <article class="featured">
+        <a class="cover c-energia" href="#pagina-articolo" tabindex="-1" aria-hidden="true"><span class="cover-tag">Energia</span></a>
+        <div class="meta"><span>30 agosto 2026</span><span class="cat c-energia"><i aria-hidden="true"></i>Energia</span></div>
+        <h3><a href="#pagina-articolo">Dal cavo seriale bruciato al copilota IA: nascita ed evoluzione del mio HEMS bi-inverter</a></h3>
+        <p>Come ho domato due inverter incompatibili, craccato una chiavetta cloud e costruito un sistema di gestione predittivo con Gemini per 25 kWp di fotovoltaico e 36 kWh di batterie.</p>
+        <a class="more" href="#pagina-articolo">Leggi l'articolo</a>
+      </article>
+
+      <div class="list" id="lista">
+        <article class="item has-cover" data-cat="proto">
+          <a class="cover c-proto" href="#pagina-articolo" tabindex="-1" aria-hidden="true"><span class="cover-tag">Protocolli</span></a>
+          <div>
+            <h3><a href="#pagina-articolo">Leggere un frame Modbus a occhio nudo</a></h3>
+            <p>Prima dell'ottimizzazione servono numeri di cui fidarsi. Come scompongo un frame byte per byte.</p>
+            <div class="meta"><span>12 settembre 2026</span><span class="cat c-proto"><i aria-hidden="true"></i>Protocolli ed embedded</span></div>
+          </div>
+        </article>
+        <article class="item has-cover" data-cat="ottim">
+          <a class="cover c-ottim" href="#pagina-articolo" tabindex="-1" aria-hidden="true"><span class="cover-tag">Ottimizzazione</span></a>
+          <div>
+            <h3><a href="#pagina-articolo">Ricaricare l'auto solo con il surplus: il modello MILP passo per passo</a></h3>
+            <p>Variabili, vincoli e funzione obiettivo di un problema che sembra semplice finché non arrivano le previsioni.</p>
+            <div class="meta"><span>2 settembre 2026</span><span class="cat c-ottim"><i aria-hidden="true"></i>Ottimizzazione</span></div>
+          </div>
+        </article>
+        <article class="item has-cover" data-cat="sist">
+          <a class="cover c-sist" href="#pagina-articolo" tabindex="-1" aria-hidden="true"><span class="cover-tag">Sistemi e IA</span></a>
+          <div>
+            <h3><a href="#pagina-articolo">Perché ho deciso di costruire in pubblico e aprire questo spazio</a></h3>
+            <p>Dall'hobby casalingo ai sistemi complessi: perché documentare il percorso, condividere il codice e costruire relazioni tecniche.</p>
+            <div class="meta"><span>20 settembre 2026</span><span class="cat c-sist"><i aria-hidden="true"></i>Sistemi e IA</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="progetti" aria-labelledby="h-progetti">
+    <div class="sec-head">
+      <div>
+        <h2 id="h-progetti">Progetti e infrastrutture</h2>
+        <p class="sec-lead">Sistemi realizzati sul campo, con schema e documentazione.</p>
+      </div>
+      <a class="more" href="#">Vedi tutti i progetti</a>
+    </div>
+    <div class="projects-list">
+      <article class="project">
+        <div class="project-num">25,05<small>kWp fotovoltaico, 36 kWh di accumulo</small></div>
+        <div>
+          <span class="status">attivo</span>
+          <h3><a href="#">HEMS bi-inverter e centrale solare con copilota IA</a></h3>
+          <p>Orchestrazione locale predittiva di fotovoltaico e accumulo LiFePO4, unendo un inverter collegato alla rete e uno in isola, con intelligenza artificiale su Proxmox.</p>
+          <ul class="tags"><li>Proxmox VE</li><li>Modbus TCP</li><li>Voltronic PI30</li><li>MQTT</li></ul>
+          <a class="more" href="#">Scheda tecnica</a>
+        </div>
+      </article>
+      <article class="project">
+        <div class="project-num">OCR<small>bollette e consumi</small></div>
+        <div>
+          <span class="status">attivo</span>
+          <h3><a href="#">EnergyLife: intelligenza energetica e scansione delle bollette</a></h3>
+          <p>Suite full-stack che riunisce i dati di consumo, prevede i costi e legge le bollette con un sistema di riconoscimento del testo.</p>
+          <ul class="tags"><li>TypeScript</li><li>Python</li><li>OCR</li><li>Proxmox</li></ul>
+          <a class="more" href="#">Scheda tecnica</a>
+        </div>
+      </article>
+      <article class="project">
+        <div class="project-num">ZFS<small>storage ridondato</small></div>
+        <div>
+          <span class="status">attivo</span>
+          <h3><a href="#">Cluster Proxmox VE e homelab multi-nodo</a></h3>
+          <p>Virtualizzazione bare-metal con pool ZFS ridondati, GPU passthrough NVIDIA, container LXC isolati e automazione sistemistica.</p>
+          <ul class="tags"><li>Proxmox VE</li><li>Debian</li><li>ZFS</li><li>LXC</li></ul>
+          <a class="more" href="#">Scheda tecnica</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec" id="chi-scrive" aria-labelledby="h-chi">
+    <div class="about">
+      <h2 id="h-chi">Chi scrive</h2>
+      <div>
+        <p>Progetto sistemi. Non scrivo ogni riga: trovo la soluzione matematica e fisica, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software.</p>
+        <p>Ho ideato e realizzato impianti con due inverter, accumulo LiFePO4, ricarica dinamica dell'auto dal surplus e previsioni di produzione oraria.</p>
+        <div class="about-links">
+          <a class="btn btn--ghost" href="#">GitHub</a>
+          <a class="btn btn--ghost" href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Il collante, Alessandro Caliciotti © 2026</span>
+    <nav aria-label="Piè di pagina"><a href="#">Articoli</a><a href="#">Progetti</a><a href="#">Chi scrive</a><a href="#">RSS</a></nav>
+  </footer>
+</div>
+
+<!-- ========================== PAGINA ARTICOLO ========================== -->
+<div class="pv-banner pv-divider" id="pagina-articolo"><div class="wrap"><span>Anteprima del tema, parte 2: la pagina articolo. Serie ed episodi sono un esempio.</span><a href="#titolo">Torna alla home</a></div></div>
+
+<div class="wrap">
+  <div class="post-layout">
+    <details class="toc" open>
+      <summary>In questo articolo</summary>
+      <ol>
+        <li><a href="#s-frame">Il frame</a></li>
+        <li><a href="#s-crc">Verificare il CRC</a></li>
+        <li><a href="#s-modello">Dai numeri al modello</a></li>
+      </ol>
+    </details>
+
+    <article class="post-main">
+      <div class="series">
+        <p class="series-title"><a href="#">Serie: parlare con gli inverter</a><small>parte 2 di 4</small></p>
+        <ul class="series-bar" aria-hidden="true"><li class="done"></li><li class="now"></li><li></li><li></li></ul>
+        <ol class="series-list">
+          <li><a href="#">Il collegamento fisico: seriale, RS485 e masse</a></li>
+          <li aria-current="page">Leggere un frame Modbus a occhio</li>
+          <li><a href="#">Inverter senza documentazione: catturare e confrontare</a></li>
+          <li><a href="#">Dai registri al modello</a></li>
+        </ol>
+      </div>
+
+      <header class="post-head">
+        <h1>Leggere un frame Modbus a occhio</h1>
+        <div class="meta"><span>12 settembre 2026</span><span>8 minuti di lettura</span><span class="cat c-proto"><i aria-hidden="true"></i>Protocolli ed embedded</span></div>
+      </header>
+
+      <div class="prose">
+        <p class="lede">Prima di parlare di ottimizzazione servono numeri di cui fidarsi. Un inverter risponde con una sequenza di byte, e ogni byte ha un posto preciso.</p>
+
+        <h2 id="s-frame">Il frame</h2>
+        <p>Leggerlo a occhio è il primo controllo che faccio, prima ancora di scrivere qualsiasi codice di decodifica. Ecco una richiesta Modbus RTU scomposta nei suoi campi.</p>
+
+        <div class="frame" role="group" aria-label="Frame Modbus RTU scomposto nei suoi campi">
+          <div class="frame-row">
+            <div class="field f1"><span class="b">01</span><span class="n">Indirizzo<br>dispositivo</span></div>
+            <div class="field f2"><span class="b">03</span><span class="n">Funzione<br>lettura registri</span></div>
+            <div class="field f3"><span class="b">00 00</span><span class="n">Registro<br>iniziale</span></div>
+            <div class="field f4"><span class="b">00 02</span><span class="n">Quantità<br>di registri</span></div>
+            <div class="field f5"><span class="b">C4 0B</span><span class="n">Controllo<br>CRC16</span></div>
+          </div>
+          <p class="frame-cap">Leggi due registri a partire dall'indirizzo 0 del dispositivo 1.</p>
+        </div>
+
+        <div class="note">
+          <p><b>Dal lato sistemista.</b> Se il CRC non torna, non è quasi mai colpa del codice. Controllo prima velocità, parità e cablaggio con le masse: risparmia a tutti una giornata di debug applicativo.</p>
+        </div>
+
+        <h2 id="s-crc">Verificare il CRC</h2>
+        <p>Il controllo si calcola in poche righe. I due byte finali del frame sono il risultato, con il byte basso per primo.</p>
+
+        <div class="codeblock">
+          <span class="lang">Python</span>
+          <button class="copy" type="button">Copia</button>
+<pre><code>def crc16_modbus(data: bytes) -> bytes:
+    crc = 0xFFFF
+    for byte in data:
+        crc ^= byte
+        for _ in range(8):
+            crc = (crc >> 1) ^ 0xA001 if crc &amp; 1 else crc >> 1
+    return crc.to_bytes(2, "little")
+
+crc16_modbus(bytes([0x01, 0x03, 0x00, 0x00, 0x00, 0x02]))  # b'\xc4\x0b'</code></pre>
+        </div>
+
+        <h2 id="s-modello">Dai numeri al modello</h2>
+        <p>Quando i numeri sono affidabili entrano nel problema di programmazione lineare intera mista. Le variabili sono le potenze di ogni ora, i vincoli sono i limiti fisici, l'obiettivo è spendere il meno possibile dalla rete.</p>
+
+<div class="eq" role="img" aria-label="Formulazione del problema di ricarica: minimizzare il costo della rete, con energia richiesta soddisfatta e potenza limitata a 3,7 kW">minimizza   Σ c(t) · P_rete(t)
+
+vincoli     Σ P_auto(t) · Δt = E_richiesta
+            0 ≤ P_auto(t) ≤ 3,7 kW
+            P_rete(t) = carico(t) + P_auto(t) − FV(t),   P_rete(t) ≥ 0</div>
+
+        <p>Il solver trova da solo la finestra migliore. Il mio lavoro è formulare bene il problema; l'implementazione la delego all'IA.</p>
+      </div>
+
+      <div class="post-end">
+        <a class="next" href="#">
+          <small>Prossimo nella serie</small>
+          <strong>Inverter senza documentazione: catturare e confrontare</strong>
+        </a>
+
+        <section class="subscribe" aria-labelledby="h-sub">
+          <h3 id="h-sub">Ricevi i nuovi articoli</h3>
+          <p>Un'email quando esce qualcosa su energia, protocolli e sistemi. Puoi disiscriverti in un clic.</p>
+          <form class="js-sub" action="#" method="post">
+            <label class="sr" for="email-post">La tua email</label>
+            <input id="email-post" type="email" name="email" placeholder="La tua email" autocomplete="email" required>
+            <button class="btn" type="submit">Iscriviti</button>
+          </form>
+          <p class="fine">Preferisci l'RSS? <a href="#">Ecco il feed</a>.</p>
+        </section>
+
+        <div class="discuss">
+          <p>Hai provato qualcosa di simile, o hai un dubbio su un passaggio? Scrivilo nella discussione.</p>
+          <a class="btn btn--ghost" href="#">Partecipa su GitHub</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="wrap">
+  <footer class="foot">
+    <span>Il collante, Alessandro Caliciotti © 2026</span>
+    <nav aria-label="Piè di pagina"><a href="#">Articoli</a><a href="#">Progetti</a><a href="#">Chi scrive</a><a href="#">RSS</a></nav>
+  </footer>
+</div>
+
+<script>
+(function () {
+  /* Filtro per argomento */
+  var buttons = document.querySelectorAll('.filters button');
+  var items = document.querySelectorAll('#lista .item');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.getAttribute('data-f');
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      items.forEach(function (it) { it.hidden = !(f === 'tutti' || it.getAttribute('data-cat') === f); });
+    });
+  });
+
+  /* Pulsante copia sui blocchi di codice */
+  document.querySelectorAll('.codeblock .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var code = btn.parentElement.querySelector('code');
+      var done = function (msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copia'; }, 1600); };
+      try {
+        navigator.clipboard.writeText(code.innerText).then(function () { done('Copiato'); }, function () { done('Non riuscito'); });
+      } catch (e) { done('Non riuscito'); }
+    });
+  });
+
+  /* Indice: evidenzia la sezione che stai leggendo */
+  var links = document.querySelectorAll('.toc a');
+  if ('IntersectionObserver' in window && links.length) {
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a) { a.removeAttribute('aria-current'); });
+          var a = map[en.target.id];
+          if (a) a.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px' });
+    Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+  }
+
+  /* Solo anteprima: i moduli di iscrizione non inviano nulla */
+  document.querySelectorAll('.js-sub').forEach(function (f) {
+    f.addEventListener('submit', function (e) { e.preventDefault(); });
+  });
+})();
+</script>
+</body>
+</html>

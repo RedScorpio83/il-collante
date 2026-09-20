@@ -1,0 +1,46 @@
+---
+interface SeriesItem {
+  title: string;
+  url?: string;
+  part: number;
+}
+
+interface Props {
+  seriesName: string;
+  currentPart: number;
+  totalParts?: number;
+  items?: SeriesItem[];
+}
+
+const { seriesName, currentPart, totalParts = 4, items = [] } = Astro.props;
+---
+
+{
+  seriesName && (
+    <div class="series">
+      <p class="series-title">
+        <span>Serie: {seriesName}</span>
+        <small>parte {currentPart} di {totalParts}</small>
+      </p>
+      <ul class="series-bar" aria-hidden="true">
+        {Array.from({ length: totalParts }).map((_, idx) => {
+          const partNum = idx + 1;
+          const statusClass = partNum < currentPart ? 'done' : partNum === currentPart ? 'now' : '';
+          return <li class={statusClass}></li>;
+        })}
+      </ul>
+      {items.length > 0 && (
+        <ol class="series-list">
+          {items.map((item) => {
+            const isCurrent = item.part === currentPart;
+            return (
+              <li aria-current={isCurrent ? 'page' : undefined}>
+                {isCurrent || !item.url ? item.title : <a href={item.url}>{item.title}</a>}
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </div>
+  )
+}

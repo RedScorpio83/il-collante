@@ -1,0 +1,16 @@
+---
+interface Props {
+  href: string;
+  categoryClass: string;
+  label: string;
+  image?: string;
+  alt?: string;
+}
+
+const { href, categoryClass, label, image, alt = '' } = Astro.props;
+---
+
+<a class={`cover ${categoryClass}`} href={href} tabindex="-1" aria-hidden="true">
+  {image && <img src={image} alt={alt} loading="lazy" />}
+  <span class="cover-tag">{label}</span>
+</a>

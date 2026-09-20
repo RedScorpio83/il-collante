@@ -1,0 +1,74 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  status?: string;
+  highlight?: {
+    value: string;
+    label: string;
+  };
+}
+
+const { id, title, description, technologies = [], status = 'attivo', highlight } = Astro.props;
+
+function deriveHighlight(): { value: string; label: string } {
+  if (highlight) return highlight;
+
+  const t = title.toLowerCase();
+  const techStr = technologies.join(' ').toLowerCase();
+
+  if (t.includes('25') || t.includes('hems') || t.includes('solare')) {
+    return { value: '25,05', label: 'kWp fotovoltaico, 36 kWh accumulo' };
+  }
+  if (t.includes('ocr') || t.includes('energylife') || techStr.includes('ocr')) {
+    return { value: 'OCR', label: 'bollette e consumi' };
+  }
+  if (t.includes('proxmox') || techStr.includes('zfs')) {
+    return { value: 'ZFS', label: 'storage ridondato e cluster' };
+  }
+  if (t.includes('cancello') || techStr.includes('esp32')) {
+    return { value: 'ESP32', label: 'gate controller e IoT' };
+  }
+  if (t.includes('frigate') || techStr.includes('rtsp')) {
+    return { value: 'RTSP', label: 'telecamere e NVR AI' };
+  }
+  if (t.includes('srvmana') || techStr.includes('go')) {
+    return { value: 'Go', label: 'orchestrator SSH' };
+  }
+  if (t.includes('p4') || t.includes('voice')) {
+    return { value: 'P4', label: 'assistente vocale locale' };
+  }
+
+  return {
+    value: technologies[0] || 'DEV',
+    label: technologies.slice(1, 3).join(', ') || 'architettura di sistema',
+  };
+}
+
+const displayHighlight = deriveHighlight();
+const projectUrl = `/projects/${id}`;
+---
+
+<article class="project">
+  <div class="project-num">
+    {displayHighlight.value}
+    <small>{displayHighlight.label}</small>
+  </div>
+  <div>
+    <span class="status">{status}</span>
+    <h3><a href={projectUrl}>{title}</a></h3>
+    <p>{description}</p>
+    {
+      technologies.length > 0 && (
+        <ul class="tags">
+          {technologies.map((tech) => (
+            <li>{tech}</li>
+          ))}
+        </ul>
+      )
+    }
+    <a class="more" href={projectUrl}>Scheda tecnica</a>
+  </div>
+</article>

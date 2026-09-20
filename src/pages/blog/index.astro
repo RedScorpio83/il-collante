@@ -1,144 +1,47 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleItem from '../../components/ArticleItem.astro';
 import { getCollection } from 'astro:content';
-import { SITE_BRAND, CATEGORIES } from '../../consts';
+import { SITE_BRAND } from '../../consts';
 
 const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-function getPostCategory(tags: string[] = []): { id: string; label: string; class: string } {
-  const t = tags.map((x) => x.toLowerCase());
-  if (t.some((x) => x.includes('energia') || x.includes('fotovoltaico') || x.includes('hems') || x.includes('solar'))) {
-    return { id: 'energia', label: 'Energia', class: 'c-energia' };
-  }
-  if (t.some((x) => x.includes('ottim') || x.includes('milp') || x.includes('solver'))) {
-    return { id: 'ottim', label: 'Ottimizzazione', class: 'c-ottim' };
-  }
-  if (t.some((x) => x.includes('proto') || x.includes('esp') || x.includes('modbus') || x.includes('mqtt') || x.includes('hardware'))) {
-    return { id: 'proto', label: 'Protocolli ed embedded', class: 'c-proto' };
-  }
-  return { id: 'sist', label: 'Sistemi e IA', class: 'c-sist' };
-}
-
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('it-IT', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
-}
 ---
 
 <BaseLayout
   title={`Articoli | ${SITE_BRAND}`}
   description="Guide tecniche, note dal campo, protocolli industriali e riflessioni sull'integrazione hardware e intelligenza artificiale."
 >
-  <div class="py-6 sm:py-10">
-    <div class="flex justify-between items-baseline gap-6 flex-wrap mb-8">
+  <section class="sec" style="border-top:0">
+    <div class="sec-head">
       <div>
-        <span class="text-xs uppercase tracking-wider font-semibold [font-family:var(--f-display)] text-[var(--muted)]">
-          Archivio Tecnico
-        </span>
-        <h1
-          class="mt-2 text-3xl sm:text-5xl font-extrabold text-[var(--ink)] tracking-tight leading-[1.05]"
-          style='font-variation-settings: "wdth" 80, "opsz" 80;'
-        >
-          Tutti gli articoli
-        </h1>
+        <h1>Tutti gli articoli</h1>
+        <p class="sec-lead">Guide tecniche, note dal campo, protocolli industriali e modelli di ottimizzazione energetica.</p>
       </div>
 
-      <!-- Filtri per argomento -->
-      <div class="flex gap-4 flex-wrap text-sm font-medium [font-family:var(--f-display)] filters" role="group" aria-label="Filtra per argomento">
-        {
-          CATEGORIES.map((cat, idx) => (
-            <button
-              type="button"
-              data-f={cat.id}
-              aria-pressed={idx === 0 ? "true" : "false"}
-              class={`cursor-pointer py-1 border-b-2 transition-colors ${
-                idx === 0
-                  ? 'text-[var(--ink)] border-[var(--sun)] font-semibold'
-                  : 'text-[var(--muted)] border-transparent hover:text-[var(--ink)]'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))
-        }
+      <div class="filters" role="group" aria-label="Filtra per argomento">
+        <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+        <button type="button" data-f="energia" aria-pressed="false">Energia</button>
+        <button type="button" data-f="ottim" aria-pressed="false">Ottimizzazione</button>
+        <button type="button" data-f="proto" aria-pressed="false">Protocolli ed embedded</button>
+        <button type="button" data-f="sist" aria-pressed="false">Sistemi e IA</button>
       </div>
     </div>
 
-    <div class="flex flex-col" id="lista">
+    <div class="list" id="lista">
       {
-        posts.map((post) => {
-          const cat = getPostCategory(post.data.tags);
-          return (
-            <article
-              class="item py-6 border-t border-[var(--rule)] first:border-t-[var(--ink)] grid grid-cols-1 sm:grid-cols-[8rem_1fr] gap-4"
-              data-cat={cat.id}
-            >
-              <span class="text-sm text-[var(--muted)] [font-family:var(--f-display)] pt-1">
-                {formatDate(post.data.pubDate)}
-              </span>
-              <div>
-                <h2
-                  class="text-xl sm:text-2xl font-bold tracking-tight text-[var(--ink)] leading-snug"
-                  style='font-variation-settings: "wdth" 90;'
-                >
-                  <a href={`/blog/${post.id}`} class="no-underline hover:underline hover:text-[var(--grid)] transition-colors">
-                    {post.data.title}
-                  </a>
-                </h2>
-                <p class="my-2 text-base text-[var(--muted)] leading-relaxed max-w-[65ch]">
-                  {post.data.description}
-                </p>
-                <div class="mt-2 flex items-center gap-3">
-                  <span class={`cat ${cat.class}`}>
-                    <i aria-hidden="true"></i>
-                    {cat.label}
-                  </span>
-                  <a href={`/blog/${post.id}`} class="text-xs font-semibold [font-family:var(--f-display)] text-[var(--ink)] hover:text-[var(--grid)]">
-                    Leggi →
-                  </a>
-                </div>
-              </div>
-            </article>
-          );
-        })
+        posts.map((post) => (
+          <ArticleItem
+            id={post.id}
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            tags={post.data.tags}
+            cover={post.data.cover}
+          />
+        ))
       }
     </div>
-  </div>
-
-  <script is:inline>
-    const buttons = document.querySelectorAll('.filters button');
-    const items = document.querySelectorAll('#lista .item');
-
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-f');
-
-        buttons.forEach((b) => {
-          const isCurrent = b === btn;
-          b.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
-          if (isCurrent) {
-            b.classList.add('text-[var(--ink)]', 'border-[var(--sun)]', 'font-semibold');
-            b.classList.remove('text-[var(--muted)]', 'border-transparent');
-          } else {
-            b.classList.remove('text-[var(--ink)]', 'border-[var(--sun)]', 'font-semibold');
-            b.classList.add('text-[var(--muted)]', 'border-transparent');
-          }
-        });
-
-        items.forEach((item) => {
-          const cat = item.getAttribute('data-cat');
-          if (filter === 'tutti' || cat === filter) {
-            item.style.display = '';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
-  </script>
+  </section>
 </BaseLayout>

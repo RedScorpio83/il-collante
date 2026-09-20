@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Il collante - Estensione Responsive Orizzontale (Wide Layout)
+   Risolve la concentrazione centrale sui display larghi / ultrawide
+   mantenendo fedeltà ai token, font e palette del tema v1.
+   ========================================================================== */
+
+/* 1. Ampiezza contenitore principale e misura del testo */
+:root {
+  --maxw: clamp(1240px, 92vw, 1560px);
+  --measure: 78ch;
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --maxw: clamp(1380px, 90vw, 1680px);
+    --measure: 82ch;
+  }
+
+  .wrap {
+    padding-inline: clamp(2rem, 5vw, 4.5rem);
+  }
+}
+
+/* 2. Hero e Grafico */
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 5vw, 5.5rem);
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .hero-lead {
+    max-width: 42ch;
+    font-size: 1.3rem;
+  }
+
+  .chart {
+    padding: 1.4rem 1.4rem 1.25rem;
+  }
+}
+
+/* 3. Statistiche numeriche */
+@media (min-width: 900px) {
+  .stats {
+    gap: 3rem;
+    padding-block: 2.75rem;
+  }
+
+  .stat-n {
+    font-size: clamp(2.8rem, 5.2vw, 4.5rem);
+  }
+}
+
+/* 4. Articoli (Home e Archivio) */
+@media (min-width: 1024px) {
+  .articles {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 5vw, 5.5rem);
+  }
+
+  .item.has-cover {
+    grid-template-columns: clamp(11.5rem, 14vw, 15rem) minmax(0, 1fr);
+    gap: 1.75rem;
+    padding-block: 1.6rem;
+  }
+
+  .item p {
+    max-width: 72ch;
+  }
+}
+
+/* 5. Lista Progetti */
+@media (min-width: 900px) {
+  .project {
+    grid-template-columns: clamp(12.5rem, 16vw, 17rem) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 4vw, 3.5rem);
+    padding-block: 2.2rem;
+  }
+
+  .project p {
+    max-width: 74ch;
+  }
+}
+
+/* 6. Layout Articolo con Indice Laterale */
+@media (min-width: 1100px) {
+  .post-layout {
+    grid-template-columns: minmax(0, 1fr) clamp(16rem, 18vw, 19rem);
+    justify-content: stretch;
+    gap: 3rem clamp(3rem, 5vw, 6rem);
+    max-width: 100%;
+  }
+
+  .post-main {
+    min-width: 0;
+    max-width: 1060px;
+  }
+
+  .prose > p,
+  .prose > ul,
+  .prose > ol {
+    max-width: 76ch;
+  }
+
+  .prose pre,
+  .codeblock,
+  .frame,
+  .eq,
+  .post-head,
+  .series,
+  .post-end {
+    max-width: 100%;
+  }
+
+  .toc {
+    width: 100%;
+  }
+}
+
+/* 7. Griglia editoriale a 2 colonne per pagine senza indice (About & Schede Progetto) */
+.editorial-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  padding-block: 2.5rem 4rem;
+}
+
+@media (min-width: 1024px) {
+  .editorial-layout {
+    grid-template-columns: clamp(18rem, 24vw, 24rem) minmax(0, 1fr);
+    gap: 3.5rem clamp(3.5rem, 6vw, 6.5rem);
+    align-items: start;
+  }
+
+  .editorial-aside {
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 2rem);
+  }
+
+  .editorial-main {
+    min-width: 0;
+  }
+
+  .editorial-main .prose > p,
+  .editorial-main .prose > ul,
+  .editorial-main .prose > ol {
+    max-width: 74ch;
+  }
+}

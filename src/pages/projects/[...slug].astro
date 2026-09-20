@@ -25,8 +25,8 @@ const formattedDate = new Intl.DateTimeFormat('it-IT', {
   title={`${project.data.title} | ${SITE_BRAND}`}
   description={project.data.description}
 >
-  <div class="post-layout">
-    <article class="post-main">
+  <div class="editorial-layout">
+    <aside class="editorial-aside">
       <header class="post-head">
         <a class="more" href="/projects" style="margin-bottom: 1.25rem;">← Torna a tutti i progetti</a>
         <h1>{project.data.title}</h1>
@@ -34,17 +34,40 @@ const formattedDate = new Intl.DateTimeFormat('it-IT', {
           <span>Rilasciato il {formattedDate}</span>
           <span class="status">{project.data.status}</span>
         </div>
+      </header>
+
+      <div style="margin-top: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);">
+        <strong style="display: block; font-family: var(--f-display); font-size: 0.95rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+          Stack Tecnico & Risorse
+        </strong>
+
         {
           project.data.technologies && project.data.technologies.length > 0 && (
-            <ul class="tags" style="margin-top: 1rem;">
+            <ul class="tags" style="margin-bottom: 1.25rem;">
               {project.data.technologies.map((tech) => (
                 <li>{tech}</li>
               ))}
             </ul>
           )
         }
-      </header>
 
+        {
+          project.data.githubUrl && (
+            <a
+              class="btn"
+              style="width: 100%; text-align: center;"
+              href={project.data.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Repository GitHub ↗
+            </a>
+          )
+        }
+      </div>
+    </aside>
+
+    <div class="editorial-main">
       <div class="prose">
         {project.data.description && <p class="lede">{project.data.description}</p>}
         <Content />
@@ -52,21 +75,21 @@ const formattedDate = new Intl.DateTimeFormat('it-IT', {
 
       {
         project.data.githubUrl && (
-          <div class="post-end">
+          <div class="post-end" style="margin-top: 3rem;">
             <div class="discuss">
-              <p>Codice sorgente, schemi e configurazioni sono disponibili su GitHub.</p>
+              <p>Codice sorgente, schemi elettrici e file di configurazione sono disponibili su GitHub.</p>
               <a
-                class="btn"
+                class="btn btn--ghost"
                 href={project.data.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Repository GitHub
+                Esplora su GitHub
               </a>
             </div>
           </div>
         )
       }
-    </article>
+    </div>
   </div>
 </BaseLayout>

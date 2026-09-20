@@ -7,15 +7,34 @@ import { SITE_BRAND, SOCIAL_LINKS } from '../consts';
   title={`Chi scrive | ${SITE_BRAND}`}
   description="Il percorso di Alessandro Caliciotti: sistemista, integratore di hardware e software, e la filosofia del coordinamento con l'Intelligenza Artificiale."
 >
-  <div class="post-layout">
-    <article class="post-main">
+  <div class="editorial-layout">
+    <aside class="editorial-aside">
       <header class="post-head">
         <h1>Chi scrive</h1>
-        <p class="lede" style="margin-top: 1.5rem;">
+        <p class="lede" style="margin-top: 1.25rem;">
           Progetto sistemi. Non scrivo ogni riga: trovo la soluzione matematica e fisica, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software.
         </p>
       </header>
 
+      <div style="margin-top: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);">
+        <strong style="display: block; font-family: var(--f-display); font-size: 1.05rem; color: var(--ink);">Alessandro Caliciotti</strong>
+        <span style="display: block; font-family: var(--f-display); font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem;">System Integrator & Soluzioni Energetiche</span>
+        
+        <div style="margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+          <a class="btn" href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a class="btn btn--ghost" href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+          <a class="btn btn--ghost" href={SOCIAL_LINKS.email}>
+            Scrivi un'email
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="editorial-main">
       <div class="prose">
         <h2>Il mio ruolo: il collante</h2>
         <p>
@@ -61,6 +80,6 @@ import { SITE_BRAND, SOCIAL_LINKS } from '../consts';
           </a>
         </div>
       </div>
-    </article>
+    </div>
   </div>
 </BaseLayout>

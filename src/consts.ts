@@ -7,9 +7,9 @@ export const SITE_DESCRIPTION = SITE_SUBTITLE;
 export const SITE_AUTHOR = 'Alessandro Caliciotti';
 
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/alessandrocaliciotti',
+  github: 'https://github.com/RedScorpio83',
   linkedin: 'https://www.linkedin.com/in/alessandro-caliciotti',
-  email: 'mailto:alessandro.caliciotti@example.com',
+  email: 'mailto:alessandro.caliciotti@gmail.com',
 };
 
 export const NAVIGATION_LINKS = [

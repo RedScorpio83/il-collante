@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_BRAND, SITE_AUTHOR, SOCIAL_LINKS } from '../consts';
+---
+
+<BaseLayout
+  title={`Chi scrive | ${SITE_BRAND}`}
+  description="Il percorso di Alessandro Caliciotti: sistemista, integratore di hardware e software, e la filosofia del coordinamento con l'Intelligenza Artificiale."
+>
+  <div class="max-w-[70ch] mx-auto py-6 sm:py-10">
+    <header class="pb-8 border-b border-[var(--rule)]">
+      <span class="text-xs uppercase tracking-wider font-semibold [font-family:var(--f-display)] text-[var(--muted)]">
+        Profilo & Metodo
+      </span>
+
+      <h1
+        class="mt-2 text-3xl sm:text-5xl font-extrabold text-[var(--ink)] tracking-tight leading-[1.05]"
+        style='font-variation-settings: "wdth" 80, "opsz" 80;'
+      >
+        Chi scrive
+      </h1>
+
+      <p class="mt-4 text-xl sm:text-2xl text-[var(--ink)] leading-relaxed italic border-l-2 border-[var(--sun)] pl-4">
+        "Progetto sistemi. Non scrivo ogni riga: trovo la soluzione, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software."
+      </p>
+    </header>
+
+    <div class="mt-8 space-y-8 text-lg leading-relaxed text-[var(--ink)]">
+      <section>
+        <h2
+          class="text-2xl font-bold text-[var(--ink)] mb-3"
+          style='font-variation-settings: "wdth" 85;'
+        >
+          Il mio ruolo: il collante
+        </h2>
+        <p>
+          Spesso nel mondo tecnologico si creano barriere artificiali: da una parte ci sono i sistemisti che conoscono le correnti, i ground loop, la stabilità dei kernel Linux e i registri Modbus; dall'altra ci sono gli sviluppatori software e i modelli di intelligenza artificiale capaci di scrivere migliaia di righe di codice in pochi secondi.
+        </p>
+        <p class="mt-3">
+          Il mio lavoro è fare da <strong>collante</strong>: comprendere i limiti fisici delle macchine, formulare rigorosamente i vincoli del problema e guidare l'Intelligenza Artificiale a produrre software affidabile, testato e resiliente sul campo.
+        </p>
+      </section>
+
+      <section>
+        <h2
+          class="text-2xl font-bold text-[var(--ink)] mb-3"
+          style='font-variation-settings: "wdth" 85;'
+        >
+          Cosa ho costruito
+        </h2>
+        <p>
+          I miei progetti non sono esercitazioni teoriche, ma apparati in produzione 24/7:
+        </p>
+        <ul class="mt-3 space-y-2 list-disc list-inside text-base sm:text-lg">
+          <li>
+            <strong>Centrale HEMS Bi-Inverter (25 kWp):</strong> Gestione predittiva di due inverter incompatibili (Huawei on-grid + Datouboss off-grid a isola) e 36 kWh di accumulatori LiFePO4, con dongle riprogrammato al banco e copilota IA.
+          </li>
+          <li>
+            <strong>EnergyLife & OCR Bollette:</strong> Suite full-stack per la simulazione energetica e la scansione intelligente dei costi tariffari con estrazione dati PUN e quote fisse.
+          </li>
+          <li>
+            <strong>Infrastruttura Proxmox VE:</strong> Cluster multi-nodo ad alta affidabilità con storage ZFS, container LXC e GPU Passthrough per carichi IA locali.
+          </li>
+          <li>
+            <strong>IoT Embedded & Protocolli:</strong> Controller ESP32 per cancelli automatici integrati con visione artificiale (Frigate NVR), assistenti vocali ESP32-P4 e tool di orchestrazione SSH in Go.
+          </li>
+        </ul>
+      </section>
+
+      <section class="p-6 rounded-md bg-[var(--surface)] border border-[var(--rule)]">
+        <h2
+          class="text-xl font-bold text-[var(--ink)] mb-2"
+          style='font-variation-settings: "wdth" 85;'
+        >
+          Incontrare persone con gli stessi interessi
+        </h2>
+        <p class="text-base text-[var(--ink)] leading-relaxed">
+          Ho aperto questo spazio per documentare il processo reale senza nascondere i fallimenti e le sfide di cantiere. Se ti occupi di automazione, energie rinnovabili, homelab o integrazione software-hardware, parliamone.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3 font-semibold text-sm [font-family:var(--f-display)]">
+          <a
+            href={SOCIAL_LINKS.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded bg-[var(--ink)] text-[var(--paper)] no-underline hover:opacity-90 transition-opacity"
+          >
+            LinkedIn
+          </a>
+          <a
+            href={SOCIAL_LINKS.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded border border-[var(--rule)] text-[var(--ink)] no-underline hover:border-[var(--ink)] transition-colors"
+          >
+            GitHub
+          </a>
+          <a
+            href={SOCIAL_LINKS.email}
+            class="px-4 py-2 rounded border border-[var(--rule)] text-[var(--ink)] no-underline hover:border-[var(--ink)] transition-colors"
+          >
+            Scrivi un'email
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

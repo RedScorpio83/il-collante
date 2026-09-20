@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --paper: #E9EEF2;
+  --surface: #F6F8FA;
+  --ink: #13202C;
+  --muted: #526476;
+  --rule: #C7D2DB;
+  --sun: #E9A100;
+  --sun-ink: #8A5800;
+  --grid: #1D5F8E;
+  --plan: #0A6F5E;
+  --on-plan: #FFFFFF;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html.dark,
+:root[data-theme="dark"] {
+  --paper: #0E1A25;
+  --surface: #14232F;
+  --ink: #E8EEF3;
+  --muted: #93A5B6;
+  --rule: #263746;
+  --sun: #F5B324;
+  --sun-ink: #F5B324;
+  --grid: #6DB2E8;
+  --plan: #45C7AE;
+  --on-plan: #08211C;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) {
+    --paper: #0E1A25;
+    --surface: #14232F;
+    --ink: #E8EEF3;
+    --muted: #93A5B6;
+    --rule: #263746;
+    --sun: #F5B324;
+    --sun-ink: #F5B324;
+    --grid: #6DB2E8;
+    --plan: #45C7AE;
+    --on-plan: #08211C;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--f-display);
+  color: var(--ink);
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--grid);
+}
+
+:focus-visible {
+  outline: 2px solid var(--grid);
+  outline-offset: 3px;
+}
+
+/* Specific theme classes */
+.cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--f-display);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.cat i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--c, var(--ink));
+  flex: none;
+}
+
+.c-energia { --c: var(--sun); }
+.c-ottim { --c: var(--plan); }
+.c-proto { --c: var(--grid); }
+.c-sist { --c: var(--ink); }
+
+/* SVG Animation */
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.7s cubic-bezier(0.3, 0.6, 0.3, 1) 0.2s forwards;
+}
+
+.fadein {
+  opacity: 0;
+  animation: fade 0.9s ease-out 1.2s forwards;
+}
+
+.fadein.late {
+  animation-delay: 1.9s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw { animation: none; stroke-dashoffset: 0; }
+  .fadein, .fadein.late { animation: none; opacity: 1; }
+}
+
+/* Hardware Frame Visualization */
+.frame {
+  margin: 2rem 0;
+  padding: 1.25rem 1.25rem 1rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.frame-row {
+  display: flex;
+  gap: 1.1rem;
+  min-width: max-content;
+}
+
+.field {
+  --fc: var(--ink);
+  border-top: 3px solid var(--fc);
+  padding-top: 0.6rem;
+}
+
+.field .b {
+  font-family: var(--f-code);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.field .n {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--f-display);
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+.f1 { --fc: var(--ink); }
+.f2 { --fc: var(--sun); }
+.f3 { --fc: var(--grid); }
+.f4 { --fc: var(--plan); }
+.f5 { --fc: var(--muted); }
+
+.frame-cap {
+  margin: 1rem 0 0;
+  font-family: var(--f-display);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.note {
+  margin: 2rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--grid);
+}
+
+.note p {
+  font-style: italic;
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.note b {
+  font-family: var(--f-display);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.eq {
+  margin: 1.5rem 0 2rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: var(--f-code);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  white-space: pre;
+}

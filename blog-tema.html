@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il collante, proposta di tema per il blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+:root {
+  --paper: #E9EEF2;
+  --surface: #F6F8FA;
+  --ink: #13202C;
+  --muted: #526476;
+  --rule: #C7D2DB;
+  --sun: #E9A100;
+  --sun-ink: #8A5800;
+  --grid: #1D5F8E;
+  --plan: #0A6F5E;
+  --on-plan: #FFFFFF;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1A25;
+    --surface: #14232F;
+    --ink: #E8EEF3;
+    --muted: #93A5B6;
+    --rule: #263746;
+    --sun: #F5B324;
+    --sun-ink: #F5B324;
+    --grid: #6DB2E8;
+    --plan: #45C7AE;
+    --on-plan: #08211C;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1A25;
+  --surface: #14232F;
+  --ink: #E8EEF3;
+  --muted: #93A5B6;
+  --rule: #263746;
+  --sun: #F5B324;
+  --sun-ink: #F5B324;
+  --grid: #6DB2E8;
+  --plan: #45C7AE;
+  --on-plan: #08211C;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--grid); }
+:focus-visible { outline: 2px solid var(--grid); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(1.25rem, 4vw, 2.5rem); }
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .5rem 1rem; z-index: 10; }
+.skip:focus { left: 1rem; top: 1rem; }
+
+h1, h2, h3 { font-family: var(--f-display); margin: 0; color: var(--ink); }
+
+/* ---------- Testata ---------- */
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; padding-block: 1.5rem; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; font-variation-settings: "wdth" 80; text-decoration: none; }
+.brand:hover { color: var(--ink); }
+.nav { display: flex; gap: 1.75rem; font-family: var(--f-display); font-weight: 500; font-size: 1rem; }
+.nav a { text-decoration: none; padding-block: .25rem; border-bottom: 2px solid transparent; }
+.nav a:hover { border-bottom-color: var(--sun); color: var(--ink); }
+
+/* ---------- Hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 4vw, 3.5rem); align-items: center; padding-block: clamp(2rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5.5rem); }
+.hero h1 {
+  font-weight: 800;
+  font-size: clamp(2.7rem, 5.6vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  font-variation-settings: "wdth" 76, "opsz" 96;
+  text-wrap: balance;
+}
+.hero p { max-width: 36ch; margin: 1.5rem 0 0; font-size: 1.25rem; line-height: 1.55; }
+.chart { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 1.25rem 1rem 1rem; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart figcaption { margin: 1rem .25rem 0; font-size: .95rem; line-height: 1.5; color: var(--muted); max-width: 62ch; }
+
+.gl { stroke: var(--rule); stroke-width: 1; }
+.mark { stroke: var(--plan); stroke-width: 1; stroke-dasharray: 3 4; opacity: .6; }
+.tick { fill: var(--muted); font: 500 13px var(--f-display); }
+.pv-area { fill: var(--sun); fill-opacity: .24; }
+.pv-line { fill: none; stroke: var(--sun); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.ld-line { fill: none; stroke: var(--grid); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.sp { fill: var(--plan); fill-opacity: .28; }
+.track { fill: var(--rule); fill-opacity: .55; }
+.ev { fill: var(--plan); }
+.ev-t { fill: var(--on-plan); font: 700 14px var(--f-display); }
+.lbl { font: 600 15px var(--f-display); }
+.lbl-sun { fill: var(--sun-ink); }
+.lbl-grid { fill: var(--grid); }
+.lbl-plan { fill: var(--plan); }
+.lbl-ink { fill: var(--ink); }
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.7s cubic-bezier(.3,.6,.3,1) .2s forwards; }
+.fadein { opacity: 0; animation: fade .9s ease-out 1.2s forwards; }
+.fadein.late { animation-delay: 1.9s; }
+@media (prefers-reduced-motion: reduce) {
+  .draw { animation: none; stroke-dashoffset: 0; }
+  .fadein, .fadein.late { animation: none; opacity: 1; }
+}
+
+/* ---------- Sezioni ---------- */
+.sec { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
+.sec h2 { font-weight: 700; font-size: clamp(1.7rem, 3vw, 2.2rem); letter-spacing: -0.015em; font-variation-settings: "wdth" 85; }
+.sec-head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+
+.filters { display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: var(--f-display); font-size: .95rem; }
+.filters button { all: unset; cursor: pointer; padding: .2rem 0; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 500; }
+.filters button:hover { color: var(--ink); }
+.filters button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--sun); font-weight: 600; }
+.filters button:focus-visible { outline: 2px solid var(--grid); outline-offset: 3px; }
+
+.articles { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.featured { border-top: 4px solid var(--ink); padding-top: 1.25rem; }
+.featured h3 { font-weight: 700; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.08; letter-spacing: -0.02em; font-variation-settings: "wdth" 85; }
+.featured h3 a { text-decoration: none; }
+.featured p { margin: 1rem 0; color: var(--ink); }
+.date { font-family: var(--f-display); font-size: .9rem; color: var(--muted); }
+.cat { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--f-display); font-size: .9rem; font-weight: 500; color: var(--muted); }
+.cat i { width: 9px; height: 9px; border-radius: 2px; background: var(--c, var(--ink)); flex: none; }
+.c-energia { --c: var(--sun); }
+.c-ottim { --c: var(--plan); }
+.c-proto { --c: var(--grid); }
+.c-sist { --c: var(--ink); }
+.more { display: inline-block; margin-top: .5rem; font-family: var(--f-display); font-weight: 600; }
+
+.list { display: grid; }
+.item { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; padding-block: 1.35rem; border-top: 1px solid var(--rule); }
+.item:first-child { border-top-color: var(--ink); border-top-width: 1px; }
+.item[hidden] { display: none; }
+.item h3 { font-weight: 600; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; font-variation-settings: "wdth" 90; }
+.item h3 a { text-decoration: none; }
+.item h3 a:hover { text-decoration: underline; }
+.item p { margin: .4rem 0 .6rem; font-size: 1rem; line-height: 1.55; color: var(--muted); max-width: 60ch; }
+.item .date { padding-top: .35rem; }
+
+/* ---------- Chi scrive ---------- */
+.about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); }
+.about p { margin: 0 0 1rem; max-width: 60ch; }
+.projects { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.25rem; font-family: var(--f-display); font-weight: 600; }
+.projects a { padding: .55rem 1rem; border: 1px solid var(--ink); border-radius: 4px; text-decoration: none; }
+.projects a:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- Articolo di esempio ---------- */
+.reading { background: var(--surface); border-block: 1px solid var(--rule); padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+.reading-note { font-family: var(--f-display); color: var(--muted); font-size: .95rem; margin: 0 0 2.5rem; }
+.post { max-width: 66ch; margin-inline: auto; }
+.post h2 { font-weight: 800; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.02; letter-spacing: -0.025em; font-variation-settings: "wdth" 80, "opsz" 80; text-wrap: balance; }
+.post .date { display: block; margin: 1rem 0 2rem; }
+.post p { margin: 0 0 1.25rem; font-size: 1.2rem; line-height: 1.7; }
+.post h3 { font-weight: 700; font-size: 1.5rem; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; font-variation-settings: "wdth" 88; }
+.post code { font-family: var(--f-code); font-size: .88em; background: var(--paper); padding: .1em .35em; border-radius: 3px; }
+.frame { margin: 2rem 0; padding: 1.25rem 1.25rem 1rem; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; overflow-x: auto; }
+.frame-row { display: flex; gap: 1.1rem; min-width: max-content; }
+.field { --fc: var(--ink); border-top: 3px solid var(--fc); padding-top: .6rem; }
+.field .b { font-family: var(--f-code); font-size: 1.2rem; font-weight: 600; letter-spacing: .06em; white-space: nowrap; }
+.field .n { display: block; margin-top: .3rem; font-family: var(--f-display); font-size: .85rem; color: var(--muted); line-height: 1.25; }
+.f1 { --fc: var(--ink); }
+.f2 { --fc: var(--sun); }
+.f3 { --fc: var(--grid); }
+.f4 { --fc: var(--plan); }
+.f5 { --fc: var(--muted); }
+.frame-cap { margin: 1rem 0 0; font-family: var(--f-display); font-size: .9rem; color: var(--muted); }
+.note { margin: 2rem 0; padding: .25rem 0 .25rem 1.25rem; border-left: 3px solid var(--grid); }
+.note p { font-style: italic; margin: 0; font-size: 1.15rem; }
+.note b { font-family: var(--f-display); font-style: normal; font-weight: 700; }
+.eq { margin: 1.5rem 0 2rem; padding: 1.1rem 1.25rem; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; overflow-x: auto; font-family: var(--f-code); font-size: .95rem; line-height: 1.75; white-space: pre; }
+
+/* ---------- Tema ---------- */
+.tokens { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 4rem); }
+.sw { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.5rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+.sw li { display: flex; gap: .85rem; align-items: center; font-family: var(--f-display); font-size: .95rem; line-height: 1.25; }
+.sw span.chip { width: 44px; height: 44px; border-radius: 4px; border: 1px solid var(--rule); flex: none; background: var(--v); }
+.sw b { display: block; font-weight: 600; }
+.sw small { color: var(--muted); font-size: .85rem; }
+.spec { margin-top: 1.5rem; }
+.spec .d { font-family: var(--f-display); font-weight: 800; font-size: 2.6rem; line-height: 1; letter-spacing: -0.025em; font-variation-settings: "wdth" 76, "opsz" 96; }
+.spec .s { font-family: var(--f-display); font-weight: 600; font-size: 1.3rem; margin-top: 1rem; font-variation-settings: "wdth" 90; }
+.spec .p { margin: 1rem 0 0; max-width: 46ch; }
+.spec small { display: block; margin-top: 1rem; color: var(--muted); font-family: var(--f-display); font-size: .9rem; }
+
+.foot { padding-block: 2.5rem 3rem; font-family: var(--f-display); font-size: .95rem; color: var(--muted); border-top: 1px solid var(--rule); }
+
+@media (max-width: 900px) {
+  .hero, .articles, .about, .tokens { grid-template-columns: minmax(0, 1fr); }
+  .hero p { max-width: 46ch; }
+}
+@media (max-width: 520px) {
+  .item { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .item .date { padding-top: 0; }
+  .nav { gap: 1.1rem; }
+  .sw { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#articoli">Vai agli articoli</a>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">Il collante</a>
+    <nav class="nav" aria-label="Principale">
+      <a href="#articoli">Articoli</a>
+      <a href="#chi-scrive">Chi scrive</a>
+      <a href="#tema">Il tema</a>
+    </nav>
+  </header>
+
+  <section class="hero" aria-labelledby="titolo">
+    <div>
+      <h1 id="titolo">Disegno l'architettura. L'IA scrive il codice.</h1>
+      <p>Appunti da un integratore di sistemi: energia, ottimizzazione, ESP32, protocolli, e come far lavorare insieme sistemisti e sviluppatori.</p>
+    </div>
+    <figure class="chart">
+      
+<svg viewBox="0 0 760 316" role="img" aria-labelledby="chart-t chart-d" xmlns="http://www.w3.org/2000/svg">
+  <title id="chart-t">Un giorno di produzione, consumi e ricarica dell'auto</title>
+  <desc id="chart-d">La produzione fotovoltaica prevista sale fino a circa 5 kW a metà giornata. Il consumo della casa resta sotto 1 kW di giorno e sale a 2 kW la sera. Il solver assegna la ricarica dell'auto da 3,7 kW dalle 11 alle 15, quando il sole produce più di quanto la casa consuma.</desc>
+  <line class="gl" x1="48" x2="740" y1="240.0" y2="240.0"/><text class="tick" x="40" y="244.0" text-anchor="end">0</text><line class="gl" x1="48" x2="740" y1="166.7" y2="166.7"/><text class="tick" x="40" y="170.7" text-anchor="end">2</text><line class="gl" x1="48" x2="740" y1="93.3" y2="93.3"/><text class="tick" x="40" y="97.3" text-anchor="end">4</text><line class="gl" x1="48" x2="740" y1="20.0" y2="20.0"/><text class="tick" x="40" y="24.0" text-anchor="end">6</text><text class="tick" x="40" y="12" text-anchor="end">kW</text><text class="tick" x="48.0" y="306" text-anchor="middle">00</text><text class="tick" x="221.0" y="306" text-anchor="middle">06</text><text class="tick" x="394.0" y="306" text-anchor="middle">12</text><text class="tick" x="567.0" y="306" text-anchor="middle">18</text><text class="tick" x="740.0" y="306" text-anchor="middle">24</text>
+  <line class="mark" x1="365.2" x2="365.2" y1="20" y2="282"/>
+  <line class="mark" x1="480.5" x2="480.5" y1="20" y2="282"/>
+  <path class="pv-area fadein" d="M221.0,240.0 L228.2,237.5 L235.4,232.9 L242.6,226.9 L249.8,220.0 L257.0,212.2 L264.2,203.8 L271.5,194.9 L278.7,185.5 L285.9,175.9 L293.1,166.0 L300.3,156.1 L307.5,146.1 L314.7,136.3 L321.9,126.6 L329.1,117.2 L336.3,108.2 L343.5,99.6 L350.8,91.4 L358.0,83.9 L365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L487.7,84.1 L494.9,92.3 L502.1,101.8 L509.3,112.6 L516.5,123.9 L523.8,134.4 L531.0,143.2 L538.2,150.9 L545.4,158.5 L552.6,167.0 L559.8,176.2 L567.0,185.6 L574.2,194.9 L581.4,203.8 L588.6,212.2 L595.8,220.0 L603.0,226.9 L610.2,232.9 L617.5,237.5 L624.7,240.0 L624.7,240.0 L221.0,240.0 Z"/>
+  <path class="sp fadein late" d="M365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L480.5,218.0 L473.3,218.4 L466.1,218.7 L458.9,218.6 L451.7,218.0 L444.5,216.6 L437.2,214.6 L430.0,212.4 L422.8,210.7 L415.6,209.1 L408.4,207.7 L401.2,206.8 L394.0,207.0 L386.8,209.0 L379.6,212.3 L372.4,215.7 L365.2,218.0 Z"/>
+  <path class="pv-line draw" pathLength="1" d="M221.0,240.0 L228.2,237.5 L235.4,232.9 L242.6,226.9 L249.8,220.0 L257.0,212.2 L264.2,203.8 L271.5,194.9 L278.7,185.5 L285.9,175.9 L293.1,166.0 L300.3,156.1 L307.5,146.1 L314.7,136.3 L321.9,126.6 L329.1,117.2 L336.3,108.2 L343.5,99.6 L350.8,91.4 L358.0,83.9 L365.2,76.9 L372.4,70.7 L379.6,65.2 L386.8,60.4 L394.0,56.5 L401.2,53.4 L408.4,51.1 L415.6,49.8 L422.8,49.3 L430.0,49.8 L437.2,51.1 L444.5,53.4 L451.7,56.5 L458.9,60.4 L466.1,65.2 L473.3,70.7 L480.5,77.0 L487.7,84.1 L494.9,92.3 L502.1,101.8 L509.3,112.6 L516.5,123.9 L523.8,134.4 L531.0,143.2 L538.2,150.9 L545.4,158.5 L552.6,167.0 L559.8,176.2 L567.0,185.6 L574.2,194.9 L581.4,203.8 L588.6,212.2 L595.8,220.0 L603.0,226.9 L610.2,232.9 L617.5,237.5 L624.7,240.0"/>
+  <path class="ld-line draw" pathLength="1" d="M48.0,223.5 L55.2,223.9 L62.4,224.4 L69.6,225.0 L76.8,225.3 L84.0,225.5 L91.2,225.4 L98.5,225.4 L105.7,225.3 L112.9,225.3 L120.1,225.3 L127.3,225.3 L134.5,225.3 L141.7,225.4 L148.9,225.6 L156.1,225.6 L163.3,225.3 L170.5,224.9 L177.8,224.4 L185.0,223.4 L192.2,221.7 L199.4,218.8 L206.6,215.0 L213.8,210.9 L221.0,207.0 L228.2,202.8 L235.4,198.3 L242.6,194.5 L249.8,192.3 L257.0,192.4 L264.2,194.2 L271.5,196.8 L278.7,199.7 L285.9,203.1 L293.1,207.2 L300.3,211.3 L307.5,214.3 L314.7,216.1 L321.9,217.1 L329.1,217.6 L336.3,218.0 L343.5,218.5 L350.8,218.9 L358.0,218.9 L365.2,218.0 L372.4,215.7 L379.6,212.3 L386.8,209.0 L394.0,207.0 L401.2,206.8 L408.4,207.7 L415.6,209.1 L422.8,210.7 L430.0,212.4 L437.2,214.6 L444.5,216.6 L451.7,218.0 L458.9,218.6 L466.1,218.7 L473.3,218.4 L480.5,218.0 L487.7,217.5 L494.9,216.9 L502.1,215.9 L509.3,214.3 L516.5,212.4 L523.8,210.0 L531.0,207.0 L538.2,203.3 L545.4,198.5 L552.6,192.8 L559.8,186.8 L567.0,181.3 L574.2,176.1 L581.4,171.0 L588.6,166.5 L595.8,163.0 L603.0,160.5 L610.2,158.9 L617.5,158.4 L624.7,159.3 L631.9,162.2 L639.1,166.7 L646.3,172.1 L653.5,177.7 L660.7,183.8 L667.9,190.7 L675.1,197.5 L682.3,203.3 L689.5,208.0 L696.8,211.9 L704.0,215.2 L711.2,218.0 L718.4,220.1 L725.6,221.7 L732.8,222.7 L740.0,223.5"/>
+  <text class="lbl lbl-sun" x="356" y="50" text-anchor="end">Produzione prevista</text>
+  <text class="lbl lbl-grid" x="640" y="136" text-anchor="middle">Consumo casa</text>
+  <text class="lbl lbl-plan fadein late" x="422.8" y="146" text-anchor="middle">surplus</text>
+  <rect class="track" x="48" y="254" width="692" height="28" rx="3"/>
+  <g class="fadein late">
+    <rect class="ev" x="365.2" y="254" width="115.3" height="28" rx="3"/>
+    <text class="ev-t" x="422.8" y="273" text-anchor="middle">3,7 kW</text>
+    <text class="lbl lbl-ink" x="492.5" y="273">Ricarica auto, scelta dal solver</text>
+  </g>
+</svg>
+
+      <figcaption>Una giornata di esempio in una casa con fotovoltaico e auto elettrica. Il solver MILP sceglie quando caricare: nelle ore in cui il sole produce più di quanto la casa consuma. Dati illustrativi.</figcaption>
+    </figure>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="sec" id="articoli" aria-labelledby="h-articoli">
+    <div class="sec-head">
+      <h2 id="h-articoli">Ultimi articoli</h2>
+      <div class="filters" role="group" aria-label="Filtra per argomento">
+        <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+        <button type="button" data-f="energia" aria-pressed="false">Energia</button>
+        <button type="button" data-f="ottim" aria-pressed="false">Ottimizzazione</button>
+        <button type="button" data-f="proto" aria-pressed="false">Protocolli ed embedded</button>
+        <button type="button" data-f="sist" aria-pressed="false">Sistemi e IA</button>
+      </div>
+    </div>
+
+    <div class="articles">
+      <article class="featured">
+        <span class="cat c-sist"><i aria-hidden="true"></i>Sistemi e IA</span>
+        <h3 style="margin-top:.75rem"><a href="#lettura">Come dirigo l'IA che scrive il codice, dalla formula al modulo funzionante</a></h3>
+        <p>Trovo la soluzione matematica, definisco i vincoli e i confini dei moduli, poi lascio l'implementazione all'IA. Ecco cosa scrivo prima di aprire una chat e come controllo il risultato.</p>
+        <span class="date">14 settembre 2026</span><br>
+        <a class="more" href="#lettura">Leggi l'articolo</a>
+      </article>
+
+      <div class="list" id="lista">
+        <article class="item" data-cat="ottim">
+          <span class="date">2 settembre 2026</span>
+          <div>
+            <h3><a href="#lettura">Ricaricare l'auto solo con il surplus: il modello MILP passo per passo</a></h3>
+            <p>Variabili, vincoli e funzione obiettivo di un problema che sembra semplice finché non arrivano le previsioni.</p>
+            <span class="cat c-ottim"><i aria-hidden="true"></i>Ottimizzazione</span>
+          </div>
+        </article>
+        <article class="item" data-cat="energia">
+          <span class="date">21 agosto 2026</span>
+          <div>
+            <h3><a href="#lettura">Isola e rete con due inverter: commutare senza spegnere la casa</a></h3>
+            <p>Cosa succede nei secondi in cui si passa da un regime all'altro, e come progettare la logica perché nessuno se ne accorga.</p>
+            <span class="cat c-energia"><i aria-hidden="true"></i>Energia</span>
+          </div>
+        </article>
+        <article class="item" data-cat="proto">
+          <span class="date">9 agosto 2026</span>
+          <div>
+            <h3><a href="#lettura">ESP32 come gateway: cosa resta sul microcontrollore e cosa va sul server</a></h3>
+            <p>Un criterio semplice per decidere dove mettere ogni pezzo di logica, prima che la memoria decida per te.</p>
+            <span class="cat c-proto"><i aria-hidden="true"></i>Protocolli ed embedded</span>
+          </div>
+        </article>
+        <article class="item" data-cat="proto">
+          <span class="date">27 luglio 2026</span>
+          <div>
+            <h3><a href="#lettura">Decodificare un protocollo senza documentazione</a></h3>
+            <p>Catturare i frame, confrontarli, isolare i campi. Il metodo che uso quando il produttore non risponde.</p>
+            <span class="cat c-proto"><i aria-hidden="true"></i>Protocolli ed embedded</span>
+          </div>
+        </article>
+        <article class="item" data-cat="sist">
+          <span class="date">11 luglio 2026</span>
+          <div>
+            <h3><a href="#lettura">Il bug non era nel codice: appunti da sistemista a sviluppatore</a></h3>
+            <p>Timeout, proxy e configurazioni che sembrano errori applicativi. Come lo capisco e come lo spiego a chi scrive Java.</p>
+            <span class="cat c-sist"><i aria-hidden="true"></i>Sistemi e IA</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="chi-scrive" aria-labelledby="h-chi">
+    <div class="about">
+      <h2 id="h-chi">Chi scrive</h2>
+      <div>
+        <p>Progetto sistemi. Non scrivo ogni riga: trovo la soluzione, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software.</p>
+        <p>Ho realizzato EnelyApp e SolarHub: gestione di due inverter, in isola e collegati alla rete, ricarica dell'auto e previsioni di produzione.</p>
+        <div class="projects">
+          <a href="#">EnelyApp</a>
+          <a href="#">SolarHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="reading" id="lettura" aria-labelledby="h-lettura">
+  <div class="wrap">
+    <p class="reading-note">Così si legge un articolo. Testo lungo in carattere con grazie, componenti tecnici in evidenza.</p>
+    <article class="post">
+      <h2 id="h-lettura">Dal frame al modello: leggere un frame Modbus a occhio</h2>
+      <span class="date">Esempio di articolo, 8 minuti di lettura</span>
+      <p>Prima di parlare di ottimizzazione servono numeri di cui fidarsi. Un inverter risponde con una sequenza di byte, e ogni byte ha un posto preciso. Leggerla a occhio è il primo controllo che faccio, prima di scrivere qualsiasi codice di decodifica.</p>
+
+      <div class="frame" role="group" aria-label="Frame Modbus RTU scomposto nei suoi campi">
+        <div class="frame-row">
+          <div class="field f1"><span class="b">01</span><span class="n">Indirizzo<br>dispositivo</span></div>
+          <div class="field f2"><span class="b">03</span><span class="n">Funzione<br>lettura registri</span></div>
+          <div class="field f3"><span class="b">00 00</span><span class="n">Registro<br>iniziale</span></div>
+          <div class="field f4"><span class="b">00 02</span><span class="n">Quantità<br>di registri</span></div>
+          <div class="field f5"><span class="b">C4 0B</span><span class="n">Controllo<br>CRC</span></div>
+        </div>
+        <p class="frame-cap">Una richiesta Modbus RTU: leggi due registri a partire dall'indirizzo 0 del dispositivo 1.</p>
+      </div>
+
+      <div class="note">
+        <p><b>Dal lato sistemista.</b> Se il CRC non torna, non è quasi mai colpa del codice. Controllo prima velocità, parità e cablaggio: risparmia a tutti una giornata di debug applicativo.</p>
+      </div>
+
+      <h3>Quando i numeri sono affidabili, entrano nel modello</h3>
+      <p>La previsione di produzione e il consumo della casa diventano i dati di un problema di programmazione lineare intera mista. Le variabili sono le potenze di ogni ora, i vincoli sono i limiti fisici, l'obiettivo è spendere il meno possibile dalla rete.</p>
+
+<div class="eq" role="img" aria-label="Formulazione del problema di ricarica: minimizzare il costo della rete, con energia richiesta soddisfatta e potenza limitata a 3,7 kW">minimizza   Σ c(t) · P_rete(t)
+
+vincoli     Σ P_auto(t) · Δt = E_richiesta
+            0 ≤ P_auto(t) ≤ 3,7 kW
+            P_rete(t) = carico(t) + P_auto(t) − FV(t),   P_rete(t) ≥ 0</div>
+
+      <p>Il solver trova da solo la finestra migliore. Il mio lavoro è scrivere bene il problema. L'implementazione, poi, è la parte più facile da delegare.</p>
+    </article>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="sec" id="tema" aria-labelledby="h-tema" style="border-top:0">
+    <h2 id="h-tema">Il tema in breve</h2>
+    <div class="tokens">
+      <div>
+        <ul class="sw">
+          <li><span class="chip" style="--v:var(--paper)"></span><span><b>Carta</b><small>sfondo, grigio freddo</small></span></li>
+          <li><span class="chip" style="--v:var(--ink)"></span><span><b>Inchiostro</b><small>testo, blu notte</small></span></li>
+          <li><span class="chip" style="--v:var(--sun)"></span><span><b>Sole</b><small>produzione, evidenze</small></span></li>
+          <li><span class="chip" style="--v:var(--grid)"></span><span><b>Rete</b><small>consumi, link</small></span></li>
+          <li><span class="chip" style="--v:var(--plan)"></span><span><b>Piano</b><small>decisioni del solver</small></span></li>
+          <li><span class="chip" style="--v:var(--surface)"></span><span><b>Superficie</b><small>figure e articoli</small></span></li>
+        </ul>
+      </div>
+      <div class="spec">
+        <div class="d">Bricolage Grotesque</div>
+        <div class="s">Titoli, navigazione, etichette</div>
+        <p class="p">Source Serif 4 per il testo degli articoli: lettura lunga, righe di circa 65 caratteri, interlinea ampia.</p>
+        <small>Il tema segue automaticamente la modalità chiara o scura del dispositivo.</small>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">Il collante, nome provvisorio.</footer>
+</div>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('.filters button');
+  var items = document.querySelectorAll('#lista .item');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.getAttribute('data-f');
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      items.forEach(function (it) {
+        it.hidden = !(f === 'tutti' || it.getAttribute('data-cat') === f);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

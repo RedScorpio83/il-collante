@@ -1,0 +1,98 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = new Intl.DateTimeFormat('it-IT', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(post.data.pubDate);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+>
+  <div class="py-6 sm:py-10">
+    <article class="max-w-[66ch] mx-auto">
+      <!-- Back link -->
+      <a
+        href="/blog"
+        class="inline-block text-sm [font-family:var(--f-display)] text-[var(--muted)] hover:text-[var(--ink)] transition-colors mb-6 no-underline"
+      >
+        ← Torna a tutti gli articoli
+      </a>
+
+      <!-- Intestazione articolo -->
+      <header class="pb-8 border-b border-[var(--rule)]">
+        <h1
+          class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--ink)] leading-[1.05]"
+          style='font-variation-settings: "wdth" 80, "opsz" 80;'
+        >
+          {post.data.title}
+        </h1>
+
+        <div class="mt-4 flex flex-wrap items-center gap-3 text-sm [font-family:var(--f-display)] text-[var(--muted)]">
+          <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <>
+              <span>·</span>
+              <div class="flex gap-2 flex-wrap">
+                {post.data.tags.map((tag: string) => (
+                  <span class="text-[var(--grid)] font-medium">#{tag}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <p class="mt-6 text-xl sm:text-2xl text-[var(--ink)] leading-relaxed italic border-l-2 border-[var(--sun)] pl-4">
+          {post.data.description}
+        </p>
+      </header>
+
+      <!-- Corpo dell'articolo con font serif ad alta leggibilità -->
+      <div class="mt-8 prose prose-lg max-w-none text-[var(--ink)] prose-headings:font-bold prose-headings:[font-family:var(--f-display)] prose-headings:text-[var(--ink)] prose-p:text-[var(--ink)] prose-p:leading-[1.7] prose-a:text-[var(--grid)] prose-code:text-[var(--ink)] prose-code:bg-[var(--surface)] prose-pre:bg-[var(--surface)] prose-pre:border prose-pre:border-[var(--rule)] prose-pre:text-[var(--ink)]">
+        <Content />
+      </div>
+
+      <!-- Chiusura e Note autore -->
+      <div class="mt-14 pt-8 border-t border-[var(--rule)] [font-family:var(--f-display)]">
+        <div class="p-6 rounded-md bg-[var(--surface)] border border-[var(--rule)] flex flex-col sm:flex-row items-baseline justify-between gap-4">
+          <div>
+            <h4 class="font-bold text-[var(--ink)] text-base">Il collante · Alessandro Caliciotti</h4>
+            <p class="text-sm text-[var(--muted)] mt-1">
+              Disegno l'architettura. L'IA scrive il codice. Vuoi discutere di questo articolo o dei sistemi correlati?
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <a
+              href="/about"
+              class="px-4 py-2 text-xs font-semibold rounded bg-[var(--ink)] text-[var(--paper)] no-underline hover:opacity-90"
+            >
+              Chi scrive
+            </a>
+            <a
+              href="/rss.xml"
+              class="px-4 py-2 text-xs font-semibold rounded border border-[var(--rule)] text-[var(--ink)] no-underline hover:border-[var(--ink)]"
+            >
+              Feed RSS
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

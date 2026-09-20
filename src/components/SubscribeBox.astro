@@ -1,0 +1,49 @@
+---
+interface Props {
+  inline?: boolean;
+  inputId?: string;
+}
+
+const { inline = false, inputId = inline ? 'email-hero' : 'email-post' } = Astro.props;
+
+// Lettura dell'URL di iscrizione da variabile d'ambiente
+// TODO: Imposta PUBLIC_SUBSCRIBE_URL per collegare il tuo provider newsletter (es. Buttondown, Mailchimp, Substack)
+const subscribeUrl = import.meta.env.PUBLIC_SUBSCRIBE_URL || '';
+const hasSubscribeUrl = Boolean(subscribeUrl && subscribeUrl.trim() !== '');
+---
+
+{
+  inline ? (
+    hasSubscribeUrl ? (
+      <div class="subscribe subscribe--inline">
+        <form class="js-sub" action={subscribeUrl} method="post">
+          <label class="sr" for={inputId}>La tua email</label>
+          <input id={inputId} type="email" name="email" placeholder="La tua email" autocomplete="email" required />
+          <button class="btn" type="submit">Iscriviti</button>
+        </form>
+        <p class="fine">Un'email quando esce un nuovo articolo. Nient'altro.</p>
+      </div>
+    ) : (
+      <div class="subscribe subscribe--inline">
+        <p class="fine">Segui le novità tramite <a href="/rss.xml">Feed RSS</a>.</p>
+      </div>
+    )
+  ) : (
+    <section class="subscribe" aria-labelledby="h-sub">
+      <h3 id="h-sub">Ricevi i nuovi articoli</h3>
+      {hasSubscribeUrl ? (
+        <>
+          <p>Un'email quando esce qualcosa su energia, protocolli e sistemi. Puoi disiscriverti in un clic.</p>
+          <form class="js-sub" action={subscribeUrl} method="post">
+            <label class="sr" for={inputId}>La tua email</label>
+            <input id={inputId} type="email" name="email" placeholder="La tua email" autocomplete="email" required />
+            <button class="btn" type="submit">Iscriviti</button>
+          </form>
+          <p class="fine">Preferisci l'RSS? <a href="/rss.xml">Ecco il feed</a>.</p>
+        </>
+      ) : (
+        <p>I nuovi articoli vengono pubblicati direttamente sul <a href="/rss.xml">feed RSS</a>.</p>
+      )}
+    </section>
+  )
+}

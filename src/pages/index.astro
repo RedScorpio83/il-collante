@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SolarChart from '../components/SolarChart.astro';
+import Cover from '../components/Cover.astro';
+import ArticleItem from '../components/ArticleItem.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import SubscribeBox from '../components/SubscribeBox.astro';
 import { getCollection } from 'astro:content';
-import { SITE_TITLE, SITE_TAGLINE, SITE_SUBTITLE, CATEGORIES } from '../consts';
+import { SITE_TITLE, SITE_TAGLINE, SITE_SUBTITLE } from '../consts';
+import { getPostCategory } from '../utils/categories';
 
 const allPosts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -13,21 +18,6 @@ const otherPosts = allPosts.slice(1);
 
 const allProjects = (await getCollection('projects'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-// Funzione helper per mappare i tag su una delle 4 macro-categorie del tema
-function getPostCategory(tags: string[] = []): { id: string; label: string; class: string } {
-  const t = tags.map((x) => x.toLowerCase());
-  if (t.some((x) => x.includes('energia') || x.includes('fotovoltaico') || x.includes('hems') || x.includes('solar'))) {
-    return { id: 'energia', label: 'Energia', class: 'c-energia' };
-  }
-  if (t.some((x) => x.includes('ottim') || x.includes('milp') || x.includes('solver'))) {
-    return { id: 'ottim', label: 'Ottimizzazione', class: 'c-ottim' };
-  }
-  if (t.some((x) => x.includes('proto') || x.includes('esp') || x.includes('modbus') || x.includes('mqtt') || x.includes('hardware'))) {
-    return { id: 'proto', label: 'Protocolli ed embedded', class: 'c-proto' };
-  }
-  return { id: 'sist', label: 'Sistemi e IA', class: 'c-sist' };
-}
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('it-IT', {
@@ -40,338 +30,124 @@ function formatDate(date: Date): string {
 
 <BaseLayout title={SITE_TITLE}>
   <!-- Hero Section -->
-  <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center py-8 sm:py-16">
-    <div class="lg:col-span-5">
-      <h1
-        class="text-3xl sm:text-5xl lg:text-[4.2rem] font-extrabold tracking-tight text-[var(--ink)] leading-[1.02]"
-        style='font-variation-settings: "wdth" 76, "opsz" 96;'
-      >
-        {SITE_TAGLINE}
-      </h1>
-      <p class="mt-6 text-lg sm:text-xl text-[var(--ink)] leading-relaxed max-w-[36ch]">
-        {SITE_SUBTITLE}
-      </p>
+  <section class="hero" aria-labelledby="titolo">
+    <div>
+      <h1 id="titolo">{SITE_TAGLINE}</h1>
+      <p class="hero-lead">{SITE_SUBTITLE}</p>
 
-      <div class="mt-8 flex flex-wrap gap-4 font-semibold text-sm [font-family:var(--f-display)]">
-        <a
-          href="/projects"
-          class="px-5 py-2.5 rounded border border-[var(--ink)] bg-[var(--ink)] text-[var(--paper)] no-underline hover:opacity-90 transition-opacity"
-        >
-          Esplora i progetti
-        </a>
-        <a
-          href="#articoli"
-          class="px-5 py-2.5 rounded border border-[var(--rule)] bg-[var(--surface)] text-[var(--ink)] no-underline hover:border-[var(--ink)] transition-colors"
-        >
-          Leggi gli articoli
-        </a>
+      <SubscribeBox inline={true} />
+
+      <div class="hero-links">
+        <a href="#progetti">Esplora i progetti</a>
+        <a href="/rss.xml">Segui via RSS</a>
       </div>
     </div>
 
-    <div class="lg:col-span-7">
-      <SolarChart />
-    </div>
+    <SolarChart />
   </section>
 
-  <!-- Sezione Ultimi Articoli -->
-  <section class="py-12 border-t border-[var(--rule)]" id="articoli" aria-labelledby="h-articoli">
-    <div class="flex justify-between items-baseline gap-6 flex-wrap mb-8">
-      <h2
-        id="h-articoli"
-        class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--ink)]"
-        style='font-variation-settings: "wdth" 85;'
-      >
-        Ultimi articoli
-      </h2>
+  <!-- L'impianto in numeri -->
+  <dl class="stats" aria-label="L'impianto in numeri">
+    <div class="stat">
+      <dt class="stat-l">fotovoltaico installato</dt>
+      <dd class="stat-n">25,05<span class="u">kWp</span></dd>
+    </div>
+    <div class="stat">
+      <dt class="stat-l">accumulo LiFePO4</dt>
+      <dd class="stat-n">36<span class="u">kWh</span></dd>
+    </div>
+    <div class="stat">
+      <dt class="stat-l">inverter, in isola e in rete</dt>
+      <dd class="stat-n">2</dd>
+    </div>
+  </dl>
 
-      <!-- Filtri per argomento -->
-      <div class="flex gap-4 flex-wrap text-sm font-medium [font-family:var(--f-display)] filters" role="group" aria-label="Filtra per argomento">
-        {
-          CATEGORIES.map((cat, idx) => (
-            <button
-              type="button"
-              data-f={cat.id}
-              aria-pressed={idx === 0 ? "true" : "false"}
-              class={`cursor-pointer py-1 border-b-2 transition-colors ${
-                idx === 0
-                  ? 'text-[var(--ink)] border-[var(--sun)] font-semibold'
-                  : 'text-[var(--muted)] border-transparent hover:text-[var(--ink)]'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))
-        }
+  <!-- Ultimi Articoli -->
+  <section class="sec" id="articoli" aria-labelledby="h-articoli" style="border-top:0">
+    <div class="sec-head">
+      <h2 id="h-articoli">Ultimi articoli</h2>
+      <div class="filters" role="group" aria-label="Filtra per argomento">
+        <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+        <button type="button" data-f="energia" aria-pressed="false">Energia</button>
+        <button type="button" data-f="ottim" aria-pressed="false">Ottimizzazione</button>
+        <button type="button" data-f="proto" aria-pressed="false">Protocolli ed embedded</button>
+        <button type="button" data-f="sist" aria-pressed="false">Sistemi e IA</button>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
-      <!-- Articolo in Evidenza -->
+    <div class="articles">
       {featuredPost && (() => {
         const cat = getPostCategory(featuredPost.data.tags);
         return (
-          <article class="lg:col-span-5 border-t-4 border-[var(--ink)] pt-5">
-            <span class={`cat ${cat.class}`}>
-              <i aria-hidden="true"></i>
-              {cat.label}
-            </span>
-            <h3
-              class="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-[var(--ink)] leading-snug"
-              style='font-variation-settings: "wdth" 85;'
-            >
-              <a href={`/blog/${featuredPost.id}`} class="no-underline hover:text-[var(--grid)] transition-colors">
-                {featuredPost.data.title}
-              </a>
-            </h3>
-            <p class="my-4 text-base text-[var(--ink)] leading-relaxed">
-              {featuredPost.data.description}
-            </p>
-            <span class="text-sm text-[var(--muted)] [font-family:var(--f-display)]">
-              {formatDate(featuredPost.data.pubDate)}
-            </span>
-            <div class="mt-3">
-              <a href={`/blog/${featuredPost.id}`} class="font-semibold text-sm [font-family:var(--f-display)] text-[var(--ink)] hover:text-[var(--grid)]">
-                Leggi l'articolo →
-              </a>
+          <article class="featured">
+            <Cover
+              href={`/blog/${featuredPost.id}`}
+              categoryClass={cat.class}
+              label={cat.label}
+              image={featuredPost.data.cover}
+              alt={`Copertina di ${featuredPost.data.title}`}
+            />
+            <div class="meta">
+              <span>{formatDate(featuredPost.data.pubDate)}</span>
+              <span class={`cat ${cat.class}`}><i aria-hidden="true"></i>{cat.label}</span>
             </div>
+            <h3><a href={`/blog/${featuredPost.id}`}>{featuredPost.data.title}</a></h3>
+            <p>{featuredPost.data.description}</p>
+            <a class="more" href={`/blog/${featuredPost.id}`}>Leggi l'articolo</a>
           </article>
         );
       })()}
 
-      <!-- Lista degli altri Articoli -->
-      <div class="lg:col-span-7 flex flex-col" id="lista">
-        {
-          otherPosts.map((post) => {
-            const cat = getPostCategory(post.data.tags);
-            return (
-              <article
-                class="item py-5 border-t border-[var(--rule)] first:border-t-[var(--ink)] grid grid-cols-1 sm:grid-cols-[6.5rem_1fr] gap-3"
-                data-cat={cat.id}
-              >
-                <span class="text-sm text-[var(--muted)] [font-family:var(--f-display)] pt-1">
-                  {formatDate(post.data.pubDate)}
-                </span>
-                <div>
-                  <h3
-                    class="text-xl font-semibold tracking-tight text-[var(--ink)] leading-snug"
-                    style='font-variation-settings: "wdth" 90;'
-                  >
-                    <a href={`/blog/${post.id}`} class="no-underline hover:underline hover:text-[var(--grid)] transition-colors">
-                      {post.data.title}
-                    </a>
-                  </h3>
-                  <p class="my-1.5 text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-[60ch]">
-                    {post.data.description}
-                  </p>
-                  <span class={`cat ${cat.class}`}>
-                    <i aria-hidden="true"></i>
-                    {cat.label}
-                  </span>
-                </div>
-              </article>
-            );
-          })
-        }
+      <div class="list" id="lista">
+        {otherPosts.map((post) => (
+          <ArticleItem
+            id={post.id}
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            tags={post.data.tags}
+            cover={post.data.cover}
+          />
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- Sezione Chi scrive -->
-  <section class="py-12 border-t border-[var(--rule)]" id="chi-scrive" aria-labelledby="h-chi">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
-      <div class="lg:col-span-5">
-        <h2
-          id="h-chi"
-          class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--ink)]"
-          style='font-variation-settings: "wdth" 85;'
-        >
-          Chi scrive
-        </h2>
-      </div>
-
-      <div class="lg:col-span-7 space-y-4 text-base sm:text-lg leading-relaxed text-[var(--ink)]">
-        <p>
-          Progetto sistemi. Non scrivo ogni riga: trovo la soluzione matematica e fisica, disegno l'architettura, coordino lo sviluppo e faccio da <strong>collante tra chi gestisce i sistemi e chi scrive il software</strong>.
-        </p>
-        <p>
-          Ho ideato e realizzato impianti complessi con due inverter (in isola e collegati alla rete), accumulo LiFePO4, ricarica dinamica EV da surplus e previsioni di produzione oraria.
-        </p>
-        
-        <div class="pt-2 flex flex-wrap gap-3 font-semibold text-sm [font-family:var(--f-display)]">
-          <a
-            href="/projects/hems-bi-inverter"
-            class="px-4 py-2 border border-[var(--ink)] rounded no-underline hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors"
-          >
-            Centrale HEMS (25 kWp)
-          </a>
-          <a
-            href="/projects/energylife-platform"
-            class="px-4 py-2 border border-[var(--ink)] rounded no-underline hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors"
-          >
-            EnergyLife (OCR & AI)
-          </a>
-          <a
-            href="/projects/proxmox-homelab-cluster"
-            class="px-4 py-2 border border-[var(--ink)] rounded no-underline hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors"
-          >
-            Cluster Proxmox VE
-          </a>
-          <a
-            href="/about"
-            class="px-4 py-2 border border-[var(--rule)] text-[var(--muted)] hover:text-[var(--ink)] rounded no-underline transition-colors"
-          >
-            Tutto il percorso →
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Laboratorio Tecnico & Frame Modbus (Estratto di Lettura) -->
-  <section class="my-10 p-6 sm:p-10 rounded-md bg-[var(--surface)] border border-[var(--rule)]">
-    <div class="max-w-[66ch] mx-auto">
-      <p class="text-sm text-[var(--muted)] [font-family:var(--f-display)] mb-4 uppercase tracking-wider font-semibold">
-        Dal banco di prova · Ingegneria dei protocolli
-      </p>
-
-      <h3
-        class="text-2xl sm:text-3xl font-extrabold text-[var(--ink)] tracking-tight leading-tight"
-        style='font-variation-settings: "wdth" 80, "opsz" 80;'
-      >
-        Leggere un frame Modbus a occhio nudo
-      </h3>
-
-      <p class="mt-4 text-base sm:text-lg leading-relaxed text-[var(--ink)]">
-        Prima di parlare di ottimizzazione servono numeri di cui fidarsi. Un inverter risponde con una sequenza di byte, e ogni byte ha un posto preciso. Saperlo leggere a occhio al banco è il primo controllo che faccio, prima ancora di scrivere qualsiasi driver di decodifica.
-      </p>
-
-      <!-- Frame Modbus RTU Scomposto -->
-      <div class="frame my-6" role="group" aria-label="Frame Modbus RTU scomposto nei suoi campi">
-        <div class="frame-row">
-          <div class="field f1"><span class="b">01</span><span class="n">Indirizzo<br>dispositivo</span></div>
-          <div class="field f2"><span class="b">03</span><span class="n">Funzione<br>lettura registri</span></div>
-          <div class="field f3"><span class="b">00 00</span><span class="n">Registro<br>iniziale</span></div>
-          <div class="field f4"><span class="b">00 02</span><span class="n">Quantità<br>di registri</span></div>
-          <div class="field f5"><span class="b">C4 0B</span><span class="n">Controllo<br>CRC16</span></div>
-        </div>
-        <p class="frame-cap">Una richiesta Modbus RTU: leggi due registri a partire dall'indirizzo 0 del dispositivo slave 1.</p>
-      </div>
-
-      <!-- Nota del sistemista -->
-      <div class="note my-6">
-        <p>
-          <b>Dal lato sistemista.</b> Se il CRC non torna, non è quasi mai colpa del codice. Controllo prima velocità in baud, bit di parità e cablaggio con le masse: risparmia a tutti una giornata di debug applicativo inutile.
-        </p>
-      </div>
-
-      <!-- Equazione Solver MILP -->
-      <p class="text-base sm:text-lg leading-relaxed text-[var(--ink)]">
-        Quando i numeri sono affidabili, entrano nel modello matematico. La previsione di produzione e il consumo diventano i vincoli del problema di programmazione lineare intera mista (MILP):
-      </p>
-
-      <div class="eq text-xs sm:text-sm">minimizza   Σ c(t) · P_rete(t)
-
-vincoli     Σ P_auto(t) · Δt = E_richiesta
-            0 ≤ P_auto(t) ≤ 3,7 kW
-            P_rete(t) = carico(t) + P_auto(t) − FV(t),   P_rete(t) ≥ 0</div>
-
-      <p class="text-sm text-[var(--muted)] [font-family:var(--f-display)]">
-        Il solver trova da solo la finestra ottimale. Il mio lavoro è formulare correttamente il problema fisico; l'implementazione del codice viene delegata all'Intelligenza Artificiale.
-      </p>
-    </div>
-  </section>
-
-  <!-- Sezione Tutti i Progetti in Griglia Tecnica -->
-  <section class="py-12 border-t border-[var(--rule)]" id="progetti">
-    <div class="flex justify-between items-baseline gap-4 mb-8">
+  <!-- Progetti e Infrastrutture -->
+  <section class="sec" id="progetti" aria-labelledby="h-progetti">
+    <div class="sec-head">
       <div>
-        <h2
-          class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--ink)]"
-          style='font-variation-settings: "wdth" 85;'
-        >
-          I Progetti e le Infrastrutture
-        </h2>
-        <p class="text-sm text-[var(--muted)] mt-1 [font-family:var(--f-display)]">
-          Tutti i sistemi realizzati sul campo con documentazione e architettura.
-        </p>
+        <h2 id="h-progetti">Progetti e infrastrutture</h2>
+        <p class="sec-lead">Sistemi realizzati sul campo, con schema e documentazione.</p>
       </div>
-      <a href="/projects" class="text-sm font-semibold [font-family:var(--f-display)] text-[var(--ink)] hover:text-[var(--grid)]">
-        Vedi tutti ({allProjects.length}) →
-      </a>
+      <a class="more" href="/projects">Vedi tutti i progetti</a>
     </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {
-        allProjects.slice(0, 4).map((project) => (
-          <article class="p-6 rounded-md bg-[var(--surface)] border border-[var(--rule)] hover:border-[var(--ink)] transition-colors flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-xs [font-family:var(--f-display)] text-[var(--muted)] mb-2">
-                <span>{formatDate(project.data.pubDate)}</span>
-                <span class="px-2 py-0.5 rounded border border-[var(--rule)] uppercase text-[11px] font-semibold text-[var(--ink)]">
-                  {project.data.status}
-                </span>
-              </div>
-              <h3
-                class="text-xl font-bold tracking-tight text-[var(--ink)] hover:text-[var(--grid)] transition-colors"
-                style='font-variation-settings: "wdth" 90;'
-              >
-                <a href={`/projects/${project.id}`} class="no-underline">
-                  {project.data.title}
-                </a>
-              </h3>
-              <p class="mt-2 text-sm text-[var(--muted)] leading-relaxed line-clamp-3">
-                {project.data.description}
-              </p>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-[var(--rule)] flex items-center justify-between flex-wrap gap-2 text-xs [font-family:var(--f-display)]">
-              <div class="flex gap-1.5 flex-wrap">
-                {project.data.technologies.slice(0, 4).map((tech) => (
-                  <span class="px-2 py-0.5 bg-[var(--paper)] rounded text-[var(--ink)] border border-[var(--rule)]">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <a href={`/projects/${project.id}`} class="font-semibold text-[var(--ink)] hover:text-[var(--grid)]">
-                Scheda tecnica →
-              </a>
-            </div>
-          </article>
-        ))
-      }
+    <div class="projects-list">
+      {allProjects.slice(0, 3).map((project) => (
+        <ProjectRow
+          id={project.id}
+          title={project.data.title}
+          description={project.data.description}
+          technologies={project.data.technologies}
+          status={project.data.status}
+          highlight={project.data.highlight}
+        />
+      ))}
     </div>
   </section>
 
-  <!-- Script Filtri Dinamici -->
-  <script is:inline>
-    const buttons = document.querySelectorAll('.filters button');
-    const items = document.querySelectorAll('#lista .item');
-
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-f');
-
-        buttons.forEach((b) => {
-          const isCurrent = b === btn;
-          b.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
-          if (isCurrent) {
-            b.classList.add('text-[var(--ink)]', 'border-[var(--sun)]', 'font-semibold');
-            b.classList.remove('text-[var(--muted)]', 'border-transparent');
-          } else {
-            b.classList.remove('text-[var(--ink)]', 'border-[var(--sun)]', 'font-semibold');
-            b.classList.add('text-[var(--muted)]', 'border-transparent');
-          }
-        });
-
-        items.forEach((item) => {
-          const cat = item.getAttribute('data-cat');
-          if (filter === 'tutti' || cat === filter) {
-            item.style.display = '';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
-  </script>
+  <!-- Chi scrive -->
+  <section class="sec" id="chi-scrive" aria-labelledby="h-chi">
+    <div class="about">
+      <h2 id="h-chi">Chi scrive</h2>
+      <div>
+        <p>Progetto sistemi. Non scrivo ogni riga: trovo la soluzione matematica e fisica, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software.</p>
+        <p>Ho ideato e realizzato impianti con due inverter, accumulo LiFePO4, ricarica dinamica dell'auto dal surplus e previsioni di produzione oraria.</p>
+        <div class="about-links">
+          <a class="btn btn--ghost" href="https://github.com/RedScorpio83" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="btn btn--ghost" href="/about">Chi sono</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

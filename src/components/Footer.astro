@@ -1,20 +1,14 @@
 ---
-import { SITE_BRAND, SITE_AUTHOR, SOCIAL_LINKS } from '../consts';
+import { SITE_BRAND, SITE_AUTHOR } from '../consts';
 const year = new Date().getFullYear();
 ---
 
-<footer class="py-10 border-t border-[var(--rule)] bg-[var(--paper)] text-[var(--muted)] text-sm [font-family:var(--f-display)]">
-  <div class="max-w-[1180px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-baseline justify-between gap-4">
-    <div>
-      <span class="font-bold text-[var(--ink)]">{SITE_BRAND}</span> · {SITE_AUTHOR} © {year}
-    </div>
-    <div class="flex items-center gap-6">
-      <a href="/blog" class="hover:text-[var(--ink)] transition-colors">Articoli</a>
-      <a href="/projects" class="hover:text-[var(--ink)] transition-colors">Progetti</a>
-      <a href="/about" class="hover:text-[var(--ink)] transition-colors">Chi scrive</a>
-      <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--ink)] transition-colors">GitHub</a>
-      <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--ink)] transition-colors">LinkedIn</a>
-      <a href="/rss.xml" class="hover:text-[var(--sun)] transition-colors">RSS</a>
-    </div>
-  </div>
+<footer class="foot">
+  <span>{SITE_BRAND}, {SITE_AUTHOR} © {year}</span>
+  <nav aria-label="Piè di pagina">
+    <a href="/blog">Articoli</a>
+    <a href="/projects">Progetti</a>
+    <a href="/about">Chi scrive</a>
+    <a href="/rss.xml">RSS</a>
+  </nav>
 </footer>

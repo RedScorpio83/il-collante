@@ -1,0 +1,47 @@
+---
+import Cover from './Cover.astro';
+import { getPostCategory } from '../utils/categories';
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+  cover?: string;
+  showCover?: boolean;
+}
+
+const { id, title, description, pubDate, tags = [], cover, showCover = true } = Astro.props;
+
+const category = getPostCategory(tags);
+const formattedDate = new Intl.DateTimeFormat('it-IT', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(pubDate);
+
+const articleUrl = `/blog/${id}`;
+---
+
+<article class={`item ${showCover ? 'has-cover' : ''}`} data-cat={category.id}>
+  {
+    showCover && (
+      <Cover
+        href={articleUrl}
+        categoryClass={category.class}
+        label={category.label}
+        image={cover}
+        alt={`Copertina di ${title}`}
+      />
+    )
+  }
+  <div>
+    <h3><a href={articleUrl}>{title}</a></h3>
+    <p>{description}</p>
+    <div class="meta">
+      <span>{formattedDate}</span>
+      <span class={`cat ${category.class}`}><i aria-hidden="true"></i>{category.label}</span>
+    </div>
+  </div>
+</article>

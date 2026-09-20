@@ -25,66 +25,48 @@ const formattedDate = new Intl.DateTimeFormat('it-IT', {
   title={`${project.data.title} | ${SITE_BRAND}`}
   description={project.data.description}
 >
-  <div class="py-6 sm:py-10">
-    <article class="max-w-[70ch] mx-auto">
-      <a
-        href="/projects"
-        class="inline-block text-sm [font-family:var(--f-display)] text-[var(--muted)] hover:text-[var(--ink)] transition-colors mb-6 no-underline"
-      >
-        ← Torna a tutti i progetti
-      </a>
-
-      <header class="pb-8 border-b border-[var(--rule)]">
-        <div class="flex items-center gap-3 text-xs [font-family:var(--f-display)] text-[var(--muted)] mb-3">
+  <div class="post-layout">
+    <article class="post-main">
+      <header class="post-head">
+        <a class="more" href="/projects" style="margin-bottom: 1.25rem;">← Torna a tutti i progetti</a>
+        <h1>{project.data.title}</h1>
+        <div class="meta" style="margin-top: 1rem;">
           <span>Rilasciato il {formattedDate}</span>
-          <span>·</span>
-          <span class="px-2 py-0.5 rounded border border-[var(--rule)] uppercase text-[10px] font-semibold text-[var(--ink)]">
-            Stato: {project.data.status}
-          </span>
+          <span class="status">{project.data.status}</span>
         </div>
+        {
+          project.data.technologies && project.data.technologies.length > 0 && (
+            <ul class="tags" style="margin-top: 1rem;">
+              {project.data.technologies.map((tech) => (
+                <li>{tech}</li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
 
-        <h1
-          class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--ink)] leading-[1.05]"
-          style='font-variation-settings: "wdth" 80, "opsz" 80;'
-        >
-          {project.data.title}
-        </h1>
+      <div class="prose">
+        {project.data.description && <p class="lede">{project.data.description}</p>}
+        <Content />
+      </div>
 
-        <p class="mt-4 text-xl text-[var(--ink)] leading-relaxed italic border-l-2 border-[var(--sun)] pl-4">
-          {project.data.description}
-        </p>
-
-        <!-- Tech tags e Repo -->
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[var(--rule)] [font-family:var(--f-display)]">
-          <div class="flex flex-wrap gap-2">
-            {
-              project.data.technologies.map((tech) => (
-                <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--surface)] text-[var(--ink)] border border-[var(--rule)]">
-                  {tech}
-                </span>
-              ))
-            }
-          </div>
-
-          {
-            project.data.githubUrl && (
+      {
+        project.data.githubUrl && (
+          <div class="post-end">
+            <div class="discuss">
+              <p>Codice sorgente, schemi e configurazioni sono disponibili su GitHub.</p>
               <a
+                class="btn"
                 href={project.data.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-[var(--ink)] text-[var(--paper)] text-xs font-semibold no-underline hover:opacity-90"
               >
-                GitHub Repository ↗
+                Repository GitHub
               </a>
-            )
-          }
-        </div>
-      </header>
-
-      <!-- Markdown content -->
-      <div class="mt-8 prose prose-lg max-w-none text-[var(--ink)] prose-headings:font-bold prose-headings:[font-family:var(--f-display)] prose-headings:text-[var(--ink)] prose-p:text-[var(--ink)] prose-p:leading-[1.7] prose-a:text-[var(--grid)] prose-code:text-[var(--ink)] prose-code:bg-[var(--surface)] prose-pre:bg-[var(--surface)] prose-pre:border prose-pre:border-[var(--rule)] prose-pre:text-[var(--ink)]">
-        <Content />
-      </div>
+            </div>
+          </div>
+        )
+      }
     </article>
   </div>
 </BaseLayout>

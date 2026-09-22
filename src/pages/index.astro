@@ -6,15 +6,16 @@ import ArticleItem from '../components/ArticleItem.astro';
 import ProjectRow from '../components/ProjectRow.astro';
 import SubscribeBox from '../components/SubscribeBox.astro';
 import { getCollection } from 'astro:content';
-import { SITE_TITLE, SITE_TAGLINE, SITE_SUBTITLE } from '../consts';
+import { SITE_TITLE, SITE_TAGLINE, SITE_SUBTITLE, SOCIAL_LINKS } from '../consts';
 import { getPostCategory } from '../utils/categories';
 
 const allPosts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const featuredPost = allPosts[0];
-const otherPosts = allPosts.slice(1);
+// Fissiamo l'articolo 'Perché ho deciso di costruire in pubblico' come punto di partenza ideale per i nuovi visitatori
+const featuredPost = allPosts.find((p) => p.id.includes('costruire-in-pubblico')) || allPosts[0];
+const otherPosts = allPosts.filter((p) => p.id !== featuredPost?.id);
 
 const allProjects = (await getCollection('projects'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -35,10 +36,16 @@ function formatDate(date: Date): string {
       <h1 id="titolo">{SITE_TAGLINE}</h1>
       <p class="hero-lead">{SITE_SUBTITLE}</p>
 
+      <div class="hero-start" style="margin-top: 1.25rem; padding: 0.75rem 1rem; background: var(--surface); border-left: 3px solid var(--sun); border-radius: var(--radius-s); font-size: 0.95rem;">
+        <strong>Nuovo qui?</strong> Inizia dall'articolo guida:
+        <a href={`/blog/${featuredPost?.id || 'benvenuti-costruire-in-pubblico'}`} style="font-weight: 600; text-decoration: underline;">Perché ho deciso di costruire in pubblico &rarr;</a>
+      </div>
+
       <SubscribeBox inline={true} />
 
       <div class="hero-links">
         <a href="#progetti">Esplora i progetti</a>
+        <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">Connettiti su LinkedIn</a>
         <a href="/rss.xml">Segui via RSS</a>
       </div>
     </div>
@@ -88,6 +95,7 @@ function formatDate(date: Date): string {
               alt={`Copertina di ${featuredPost.data.title}`}
             />
             <div class="meta">
+              <span class="cat" style="background: var(--ink); color: var(--paper); font-weight: 700;">Inizia da qui</span>
               <span>{formatDate(featuredPost.data.pubDate)}</span>
               <span class={`cat ${cat.class}`}><i aria-hidden="true"></i>{cat.label}</span>
             </div>
@@ -141,11 +149,12 @@ function formatDate(date: Date): string {
     <div class="about">
       <h2 id="h-chi">Chi scrive</h2>
       <div>
-        <p>Progetto sistemi. Non scrivo ogni riga: trovo la soluzione matematica e fisica, disegno l'architettura, coordino lo sviluppo e faccio da collante tra chi gestisce i sistemi e chi scrive il software.</p>
-        <p>Ho ideato e realizzato impianti con due inverter, accumulo LiFePO4, ricarica dinamica dell'auto dal surplus e previsioni di produzione oraria.</p>
+        <p><strong>Alessandro Caliciotti</strong> &mdash; System integrator e progettista di soluzioni energetiche. Da oltre vent'anni lavoro sul campo con hardware, reti e sistemi operativi; gestisco una centrale solare da 25 kWp, 36 kWh di batterie LiFePO4 e nodi Proxmox bare-metal.</p>
+        <p>Non scrivo a mano ogni singola riga di codice: trovo la soluzione fisica e matematica, disegno l'architettura complessiva e faccio da <em>collante</em> tra chi gestisce il ferro, i protocolli industriali e l'intelligenza artificiale.</p>
         <div class="about-links">
-          <a class="btn btn--ghost" href="https://github.com/RedScorpio83" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="btn btn--ghost" href="/about">Chi sono</a>
+          <a class="btn" href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">Connettiti su LinkedIn</a>
+          <a class="btn btn--ghost" href="/about">Chi sono &rarr;</a>
+          <a class="btn btn--ghost" href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </div>
     </div>

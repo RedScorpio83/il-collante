@@ -1,13 +1,17 @@
 ---
-title: "Fantascienza Decisionale nel Nostro HEMS: Co-Ottimizzazione Predittiva tra Auto Elettrica, Clima e 4 Batterie"
-description: "Come abbiamo insegnato alla nostra centrale solare bi-inverter a non temere le nuvole: cannibalizzazione calcolata delle batterie (E_free), inerzia termica a 65 ore, efficienza reale OBC della Dacia Spring e previsioni Solcast ad anello chiuso."
+title: "Come il mio impianto decide da solo quando caricare l'auto"
+description: "Co-ottimizzazione predittiva tra clima, ricarica dell'auto elettrica e 36 kWh di batterie LiFePO4: cannibalizzazione calcolata, inerzia termica e previsioni Solcast ad anello chiuso."
 pubDate: 2026-09-22
 tags: ["hems", "fotovoltaico", "ev-charging", "termodinamica", "bess", "machine-learning", "proxmox"]
 ---
 
-C'è un momento preciso, quando sviluppi un sistema di automazione energetica per la tua casa, in cui la semplice logica reattiva non basta più. 
+Ricaricare un'auto elettrica a casa con l'energia del sole sembra un'operazione banale, finché non arriva una giornata di cielo variabile: appena passa una nuvola, la maggior parte dei sistemi commerciali sul mercato stacca bruscamente la ricarica, per poi riavviarla pochi minuti dopo. Il risultato sono componenti meccanici stressati, batterie dell'auto ricaricate a singhiozzo e prelievi imprevisti dalla rete elettrica a pagamento.
 
-La logica reattiva è quella che usano quasi tutti i sistemi commerciali sul mercato:
+Avendo a disposizione un impianto con 36 kWh di batterie stazionarie, ci siamo chiesti: **perché non insegnare alla casa a prevedere il meteo e decidere autonomamente quando conviene caricare?**
+
+C'è un momento preciso, quando sviluppi un sistema di automazione energetica, in cui la semplice logica reattiva non basta più. 
+
+La logica reattiva è quella standard:
 * *C'è il sole e il contatore immette 2.0 kW in rete?* $\to$ Accendi la pompa di calore o fai partire la ricarica dell'auto elettrica.
 * *Passa una nuvola per 5 minuti e l'immissione si azzera?* $\to$ Spegni tutto all'istante, stacca il compressore, azzera la Wallbox a 0A.
 * *Torna il sole?* $\to$ Riavvia tutto.

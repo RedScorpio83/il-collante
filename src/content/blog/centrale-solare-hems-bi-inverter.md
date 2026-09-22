@@ -1,9 +1,13 @@
 ---
-title: "Dal Cavo Seriale Bruciato al Copilota IA: Nascita ed Evoluzione del Nostro HEMS Bi-Inverter"
-description: "Come abbiamo domato due inverter incompatibili, craccato una chiavetta cloud e costruito un Home Energy Management System predittivo con Gemini IA per 25 kWp di fotovoltaico e 36 kWh di batterie."
+title: "Due inverter incompatibili e un cavo bruciato: come è nato il mio impianto solare"
+description: "Come far dialogare due inverter che non dovevano parlarsi, craccare una chiavetta cloud e costruire un sistema di gestione predittivo con l'IA per 25 kWp di fotovoltaico."
 pubDate: 2026-08-30
 tags: ["hems", "fotovoltaico", "iot", "proxmox", "gemini-ai", "hardware-hacking", "modbus"]
 ---
+
+Se installi due inverter solari di produttori diversi, scoprirai presto che non esiste alcuna app commerciale sul mercato capace di farli collaborare: ciascun apparecchio ignora completamente l'esistenza dell'altro, rischiando di scaricare le batterie a vicenda o di prelevare energia a pagamento dalla rete.
+
+Per farli funzionare come un unico cervello energetico a casa mia, non c'erano scorciatoie: ho dovuto collegarmi fisicamente alle porte seriali, decodificare i dati grezzi byte per byte e creare un'architettura software su misura per coordinarli.
 
 Se qualcuno qualche anno fa mi avesse detto che un giorno avrei gestito **25.05 kWp di fotovoltaico e 36 kWh di batterie LiFePO4** con un modello di Intelligenza Artificiale su Proxmox che dialoga in tempo reale con due inverter di marche totalmente diverse, probabilmente mi sarei messo a ridere. 
 

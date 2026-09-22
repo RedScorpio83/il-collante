@@ -1,4 +1,6 @@
 ---
+import { SOCIAL_LINKS } from '../consts';
+
 interface Props {
   inline?: boolean;
   inputId?: string;
@@ -25,12 +27,14 @@ const hasSubscribeUrl = Boolean(subscribeUrl && subscribeUrl.trim() !== '');
       </div>
     ) : (
       <div class="subscribe subscribe--inline">
-        <p class="fine">Segui le novità tramite <a href="/rss.xml">Feed RSS</a>.</p>
+        <p class="fine">
+          Segui le novità tramite <a href="/rss.xml">Feed RSS</a> oppure connettiti su <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </p>
       </div>
     )
   ) : (
     <section class="subscribe" aria-labelledby="h-sub">
-      <h3 id="h-sub">Ricevi i nuovi articoli</h3>
+      <h3 id="h-sub">Resta in contatto</h3>
       {hasSubscribeUrl ? (
         <>
           <p>Un'email quando esce qualcosa su energia, protocolli e sistemi. Puoi disiscriverti in un clic.</p>
@@ -42,7 +46,12 @@ const hasSubscribeUrl = Boolean(subscribeUrl && subscribeUrl.trim() !== '');
           <p class="fine">Preferisci l'RSS? <a href="/rss.xml">Ecco il feed</a>.</p>
         </>
       ) : (
-        <p>I nuovi articoli vengono pubblicati direttamente sul <a href="/rss.xml">feed RSS</a>.</p>
+        <>
+          <p>I nuovi articoli vengono pubblicati direttamente sul <a href="/rss.xml">feed RSS</a>.</p>
+          <p class="fine" style="margin-top: 0.75rem;">
+            Preferisci il contatto diretto? Seguimi su <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> o scrivimi a <a href={SOCIAL_LINKS.email}>alessandro.caliciotti@gmail.com</a>.
+          </p>
+        </>
       )}
     </section>
   )

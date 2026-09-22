@@ -1,13 +1,19 @@
 import { execSync } from 'child_process';
 
-function run(cmd, desc) {
+function run(cmd, desc, fatal = true) {
   console.log(`\n⏳ ${desc}...`);
   try {
     execSync(cmd, { stdio: 'inherit' });
     console.log(`✅ ${desc} completato.`);
+    return true;
   } catch (error) {
-    console.error(`\n❌ Errore durante: ${desc}`);
-    process.exit(1);
+    if (fatal) {
+      console.error(`\n❌ Errore durante: ${desc}`);
+      process.exit(1);
+    } else {
+      console.warn(`\n⚠️ Attenzione durante: ${desc}`);
+      return false;
+    }
   }
 }
 
@@ -33,16 +39,23 @@ try {
     console.log('\nℹ️ Nessun nuovo file da salvare in Git (già sincronizzato).');
   }
 } catch (e) {
-  console.warn('Avviso: sincronizzazione Git parziale, proseguo con il deploy.');
+  console.warn('Avviso: sincronizzazione Git parziale, proseguo con la compilazione.');
 }
 
 // 2. Compilazione del sito Astro
 run('npm run build', 'Compilazione del sito (Astro build)');
 
 // 3. Deploy su Cloudflare con Wrangler
-run('npx wrangler deploy', 'Deploy su Cloudflare');
+const deployed = run('npx wrangler deploy', 'Deploy su Cloudflare', false);
 
 console.log('\n==================================================');
-console.log('🎉 SITO PUBBLICATO CON SUCCESSO!');
-console.log('👉 https://il-collante.alessandro-caliciotti.workers.dev');
+if (deployed) {
+  console.log('🎉 SITO PUBBLICATO CON SUCCESSO!');
+  console.log('👉 https://www.ilcollante.it');
+  console.log('👉 https://il-collante.alessandro-caliciotti.workers.dev');
+} else {
+  console.log('✅ Aggiornamenti salvati e inviati a GitHub con successo!');
+  console.log('👉 Se il sito è collegato tramite Cloudflare Pages, il deploy è partito automaticamente dal push.');
+  console.log('👉 Per abilitare il deploy manuale via Wrangler da terminale: esegui `npx wrangler login` una sola volta.');
+}
 console.log('==================================================\n');

@@ -20,7 +20,7 @@ const {
 } = Astro.props;
 
 // Calcolo URL canonico e Open Graph usando il dominio reale configurato in astro.config.mjs
-const siteUrl = Astro.site || new URL('https://il-collante.alessandro-caliciotti.workers.dev');
+const siteUrl = Astro.site || new URL('https://www.ilcollante.it');
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
 
 // og:image fallback su public/og-image.png (1200x630) se non specificata dall'articolo

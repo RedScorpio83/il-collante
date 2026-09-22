@@ -291,7 +291,10 @@ h1, h2, h3, h4 { font-family: var(--f-display); margin: 0; color: var(--ink); }
 .prose li { margin-bottom: .4rem; }
 .prose a { color: var(--grid); }
 .prose a:hover { color: var(--ink); }
-.prose img { display: block; height: auto; border-radius: var(--radius); }
+.prose img { display: block; max-width: 100%; height: auto; margin: 2rem auto; border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+.prose figure { margin: 2.25rem 0; }
+.prose figure img { margin: 0 auto; }
+.prose figcaption { margin-top: 0.75rem; text-align: center; font-family: var(--f-display); font-size: 0.88rem; color: var(--muted); font-style: italic; }
 .prose code { padding: .05em .35em; background: var(--surface); border: 1px solid var(--rule); border-radius: 3px; font-family: var(--f-code); font-size: .86em; }
 .prose pre { margin: 1.75rem 0; padding: 1.1rem 1.25rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow-x: auto; font-family: var(--f-code); font-size: .92rem; line-height: 1.65; tab-size: 2; }
 .prose pre code { padding: 0; background: none; border: 0; font-size: inherit; }

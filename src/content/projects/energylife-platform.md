@@ -1,28 +1,129 @@
 ---
-title: "EnergyLife: Piattaforma di Intelligenza Energetica & OCR Bollette"
-description: "Suite full-stack per la sintesi dei dati di consumo, analisi predittiva dei costi, scanner intelligente per bollette energetiche e architettura modulare su Proxmox."
+title: "EnergyLife (EnerlyApp): Piattaforma di Intelligenza Energetica & OCR Bollette"
+description: "Suite full-stack per la sintesi dei consumi, audit tariffario ARERA con OCR intelligente a zero GDPR leak, simulatore predittivo di ROI solare e server MCP su Proxmox."
 pubDate: 2026-07-25
-technologies: ["TypeScript", "Python", "OCR", "Proxmox", "FastAPI", "Docker", "MCP"]
+technologies: ["TypeScript", "React", "Python", "FastAPI", "OCR Vision", "Proxmox (CT 116)", "PostgreSQL", "Docker", "Model Context Protocol (MCP)"]
 status: "active"
 featured: true
-githubUrl: "https://github.com/alessandrocaliciotti"
+githubUrl: "https://github.com/RedScorpio83"
 ---
 
-## Il Problema
+![Scanner Intelligente Bollette e OCR ARERA](/images/projects/energylife/bill-scanner-tech.webp)
 
-I consumatori e le piccole aziende affrontano una burocrazia tariffaria complessa: le bollette di luce e gas sono piene di voci opache (dispacciamento, quote fisse, spread, accise e scaglioni) che rendono quasi impossibile verificare se il fornitore sta applicando le tariffe promesse e se conviene cambiare offerta o investire in autoconsumo.
+## Il Problema: L'Opacità delle Bollette e delle Tariffe Energetiche
 
-## La Soluzione
+Chiunque abbia provato ad analizzare una fattura elettrica o del gas in Italia si è scontrato con una giungla inestricabile: tra **quote fisse, corrispettivi di potenza, oneri di sistema (ASOS/ARIM), dispacciamento, scaglioni e accise**, capire quanto si paga realmente per chilowattora o metro cubo è quasi impossibile.
 
-**EnergyLife** è una piattaforma progettata per automatizzare l'acquisizione, la decodifica e la simulazione energetica su scala micro e macro.
+I comparatori commerciali online non offrono una soluzione reale: richiedono dati personali, vendono i contatti ai call center e propongono solo i fornitori con cui hanno accordi commerciali. Dall'altro lato, chi progetta o installa impianti solari con accumulo spesso si affida a calcoli approssimativi basati su medie annuali, senza incrociare le curve orarie di carico con le tariffe effettive applicate dal proprio gestore.
 
-### Caratteristiche Fondamentali
+---
 
-1. **AI Document Scanner & OCR Avanzato:** Pipeline per estrarre in pochi secondi PUN, F1/F2/F3, costi di commercializzazione, potenza impegnata e consumi effettivi dai PDF delle bollette di qualsiasi gestore italiano.
-2. **Motore di Simulazione Tariffaria:** Calcolo predittivo dell'impatto economico di un impianto fotovoltaico o di un sistema di accumulo sui consumi storici dell'utente.
-3. **Data Synthesizer & Privacy-First (GDPR):** Esportazione conforme e anonimizzazione dei dati energetici sensibili con backup automatico locale.
-4. **Architettura a Moduli Dinamici & MCP Server:** Integrazione con Model Context Protocol (MCP) per permettere ad agenti IA e copiloti di interrogare stato, schemi e parametri di sistema in tempo reale su cluster Proxmox VE.
+## L'Architettura Software: Pipeline Ibrida a Due Fasi
 
-## Impatto
+**EnergyLife** (nota anche come **EnerlyApp**) è nata per risolvere questo problema con un approccio ingegneristico e rigoroso. Il cuore dell'applicazione è una **pipeline ibrida client/server a due stadi** che unisce l'intelligenza visiva dei modelli multimodali con la velocità fulminea del parsing deterministico locale.
 
-EnergyLife consente di auditare al centesimo ogni fattura energetica, confrontare offerte di mercato senza intermediari commerciali e verificare il ritorno sull'investimento reale degli impianti solari ed elettrici.
+```text
+┌────────────────────────┐
+│  Fattura PDF / Foto    │
+└───────────┬────────────┘
+            │ 1. Redazione GDPR Locale (Off-screen Canvas)
+            ▼
+┌────────────────────────┐
+│ Single Patchwork Canvas│  (Oscura PII: Nome, CF, Indirizzo, POD/PDR)
+└───────────┬────────────┘
+            │
+            ├──► Se PRIMA bolletta del fornitore:
+            │    Chiamata AI Vision ──► Apprende "patternSchema" (Ancore & Coordinate)
+            │
+            └──► Se bolletta successiva (2..12 del batch):
+                 Motore Locale (0.01s) ──► Estrazione deterministica a costo zero
+```
+
+### 1. Zero GDPR Leak: Il Patchwork Canvas
+Prima che qualunque immagine o testo lasci il browser dell'utente, un modulo client-side (`billRedactorCanvas.js`) identifica e maschera preventivamente tutti i dati personali identificativi (PII):
+- Codice Fiscale, Nome e Cognome dell'intestatario.
+- Indirizzo esatto di fornitura.
+- **Nessun codice identificativo POD o PDR viene mai trasmesso o salvato**. La localizzazione climatica fa fede esclusivamente a livello di Comune dal profilo dell'utenza.
+
+### 2. Batch Learning a Costo Computazionale Zero
+Quando un utente carica uno storico di 12 bollette dello stesso fornitore (es. Enel, Eni Plenitude, Hera, A2A):
+1. **Fase 1 (Apprendimento Layout):** L'IA Vision analizza solo la prima pagina anonimizzata della prima fattura, estraendo i valori ed esportando un dizionario di **ancore testuali e geometriche** (`patternSchema`).
+2. **Fase 2 (Replicazione Deterministica):** Le restanti 11 fatture vengono elaborate istantaneamente dal motore regex locale (`billPatternLearner.js` e `billRegexParser.js`) in meno di **10 millisecondi** a documento, senza consumare token API o inviare ulteriori dati all'esterno.
+
+---
+
+## Snippet di Codice: Il Motore di Apprendimento Ancore
+
+Ecco l'implementazione del prompt e della struttura di estrazione dei 23 campi ARERA in `src/engine/billPatternLearner.js`:
+
+```javascript
+/**
+ * MOTORE DINAMICO DI APPRENDIMENTO ANCORE & REPLICAZIONE BATCH (billPatternLearner.js)
+ * 
+ * FASE 1: L'IA Vision analizza la 1ª bolletta redacted, estrae i dati ed apprende lo schema ("patternSchema").
+ * FASE 2..N: Il parser locale usa il patternSchema per estrarre tutti i 23 campi ARERA in 0.01s.
+ */
+import { callActiveAiProvider, cleanAndParseAiJson } from './aiClient';
+import { parseBillTextStrict } from './billRegexParser';
+
+export const PATTERN_LEARNING_SYSTEM_PROMPT = `Sei un ingegnere specializzato nell'analisi di layout per bollette energetiche italiane ARERA.
+Analizza il documento fornito (già depurato da dati sensibili GDPR).
+
+La tua missione è duplice:
+1. Estrarre i dati contabili ed energetici anonimizzati.
+2. Identificare lo SCHEMA DI ANCORE DI TESTO ("patternSchema") per questo gestore, indicando le frasi chiave per individuare ciascun campo.
+
+Rispondi ESCLUSIVAMENTE con un JSON valido:
+{
+  "extractedData": {
+    "supplier": "Nome Fornitore",
+    "type": "luce" | "gas" | "duale",
+    "month": "Mese",
+    "year": 2024,
+    "amount": 120.50,
+    "potenzaImpegnataKw": 3.0,
+    "tensioneFasi": "monofase" | "trifase",
+    "f1Kwh": 140, "f2Kwh": 95, "f3Kwh": 115,
+    "quotaFissaMateria": 12.00,
+    "quotaEnergiaMateria": 95.45,
+    "quotaFissaTrasporto": 3.68,
+    "quotaPotenzaTrasporto": 5.60,
+    "spesaOneriSistema": 14.20,
+    "accise": 6.52,
+    "iva": 14.15
+  },
+  "patternSchema": {
+    "anchors": {
+      "f1": "Fascia F1",
+      "spesaTrasporto": "Spesa per il trasporto e la gestione del contatore",
+      "potenza": "Potenza impegnata"
+    }
+  }
+}`;
+```
+
+---
+
+![Simulatore Predittivo ROI e Autoconsumo](/images/projects/energylife/ai-simulation-roi.webp)
+
+## Simulatore di ROI & Integrazione con Inverter Solari
+
+I dati estratti dalle bollette confluiscono nel motore di simulazione energetica:
+
+1. **Deanonymizer Tariffario:** Riconosce la formula contrattuale reale (es. *PUN Orario + Spread*, *Tariffa Fissa Bloccata*, *Monoraria vs Multioraria*).
+2. **Dimensionamento Fotovoltaico & Batterie:** Simula l'effetto di diverse potenze di picco ($kWp$) e capacità di accumulo ($kWh$ LiFePO4) applicate alla curva di carico oraria reale dell'utente, calcolando il tempo di ammortamento al centesimo.
+3. **Simulazione Pompa di Calore (PDC) & Climatizzazione:** Stima il coefficiente COP orario basato sulla temperatura climatica locale per calcolare l'impatto economico dell'abbandono del gas metano.
+
+![Inverter and Storage Hub](/images/projects/energylife/inverter-storage-hub.webp)
+
+---
+
+## Integrazione Proxmox & Server MCP (Model Context Protocol)
+
+Per integrarsi con gli assistenti IA e con il cluster di automazione di casa, EnergyLife espone un server **MCP** dedicato in esecuzione nel container Proxmox LXC CT 116:
+
+* **`energylife_architecture_schema`**: Fornisce lo schema DB e la topologia dei microservizi.
+* **`energylife_app_status`**: Riporta lo stato dei servizi in tempo reale (PostgreSQL, FastAPI, Docker).
+* **`energylife_doc_lookup`**: Permette agli agenti IA di consultare le specifiche tecniche dei moduli e i log applicativi direttamente da terminale o chat.
+
+L'infrastruttura è completamente containerizzata con Docker Compose e salvaguardata con backup automatici cifrati e ridondati su pool ZFS.

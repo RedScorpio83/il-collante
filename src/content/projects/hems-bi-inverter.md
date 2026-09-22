@@ -1,89 +1,116 @@
 ---
-title: "HEMS Bi-Inverter & Centrale Solare 25 kWp con Copilota IA"
-description: "Orchestrazione locale predittiva di 25.05 kWp fotovoltaico e 36 kWh di accumulo LiFePO4 unendo inverter Huawei (Grid-tied) e Datouboss (Off-grid) con AI su Proxmox."
+title: "SolarDashboard & HEMS Bi-Inverter: Centrale Solare 25 kWp con Copilota IA"
+description: "Piattaforma di supervisione SCADA e orchestrazione predittiva locale per 25.05 kWp di fotovoltaico e 36 kWh di batterie LiFePO4: driver Modbus/PI30, SSOT a microservizi, solutore HiGHS MILP e cockpit reattivo."
 pubDate: 2026-08-30
-technologies: ["Proxmox VE (LXC)", "Modbus-TCP", "Voltronic PI30", "MQTT Mosquitto", "Python 3.11", "HiGHS MILP", "Jev-like AI", "React 18", "Tailwind CSS", "SQLite WAL", "PostgreSQL"]
+technologies: ["Proxmox VE (LXC)", "Python 3.11", "Modbus-TCP", "Voltronic PI30 (RS232)", "HiGHS MILP Solver", "React 18", "SSE Streaming", "MQTT Mosquitto", "SQLite WAL", "Docker", "ESP32-P4"]
 status: "active"
 featured: true
-githubUrl: "https://github.com/alessandrocaliciotti"
+githubUrl: "https://github.com/RedScorpio83"
 ---
 
-## Il Contesto & La Sfida Ingegneristica
+![Dashboard Solare: Sinottico Flussi Real-Time](/images/projects/dashboard-solare/screen_0_sinottico.png)
 
-Gestire una centrale energetica residenziale complessa composta da:
-- **25.05 kWp di fotovoltaico:** 14 kWp su tetto (Sud-Est e Sud-Ovest) + 11.05 kWp su pergola bifacciale.
-- **36 kWh di batterie LiFePO4:** 20 kWh ad alto voltaggio (Huawei LUNA2000) e 16 kWh a 48V (HumsiENK 16S).
-- **Due inverter concettualmente incompatibili:** un inverter trifase on-grid Huawei SUN2000-10KTL-M1 e un inverter monofase off-grid a isola Datouboss DT4811B (11 kW).
+## Il Contesto Fisico: Unire Due Inverter Incompatibili
 
-Il problema principale: le piattaforme commerciali non sono progettate per far dialogare apparati di marchi differenti, i dati cloud hanno latenze di minuti e i protocolli ufficiali dei costruttori spesso sono blindati o cloud-only.
+Gestire la produzione e i consumi di un'abitazione con grande capacità energetica presenta una sfida enorme se gli apparati provengono da produttori con filosofie differenti:
+* **25.05 kWp di campo solare:** 14.0 kWp su falda tetto principale (Sud-Est e Sud-Ovest) + 11.05 kWp su pergola fotovoltaica bifacciale.
+* **36.0 kWh di accumulo LiFePO4:** 20.0 kWh ad alto voltaggio (doppia torre Huawei LUNA2000 HV) e 16.0 kWh a bassa tensione 48V (banco HumsiENK 16S).
+* **Due inverter concettualmente divergenti:**
+  1. **Huawei SUN2000-10KTL-M1 (Trifase On-Grid):** Connesso alla rete Enel e allo Smart Meter DTSU666-H. Lavora con altissima efficienza (95%) e dialoga via porta di rete con protocollo **Modbus-TCP** (porta 6607).
+  2. **Datouboss DT4811B 11 kW (Monofase Off-Grid):** Alimentato in AC-IN dall'uscita di Huawei e dotato di un canale inverter a isola pura che eroga energia a tutto il quadro di casa garantendo commutazione UPS istantanea (<15ms) in caso di blackout. Comunica via porta seriale RS232 a 2400 baud con protocollo **Voltronic PI30**.
 
-## L'Architettura Implementata
+Nessun software commerciale al mondo è in grado di far cooperare queste due macchine. Senza un'orchestrazione software centralizzata, i due inverter entrerebbero in conflitto costante, ricaricando le batterie a vicenda o prelevando dalla rete a pagamento.
+
+---
+
+![Schema SCADA Unifilare Centrale](/images/projects/dashboard-solare/scada_unifilar_diagram.png)
+
+## L'Architettura Software: Single Source of Truth (SSOT)
+
+Per garantire la massima sicurezza elettrica e scongiurare corruzioni di configurazione causate da accessi concorrenti, la **SolarDashboard** e il motore **Solar Hub v4.0** sono strutturati attorno al principio del **Single Source of Truth (SSOT)**:
 
 ```text
-                                  ┌─────────────────────────────┐
-                                  │   PV TETTO: 14.0 kWp        │
-                                  │   (Sud-Est 8.2kW + SO 5.8kW)│
-                                  └──────────────┬──────────────┘
-                                                 │ DC
-                                                 ▼
-┌──────────────────────┐  Modbus-TCP     ┌─────────────────────────────┐   AC    ┌──────────────────────┐
-│  BATTERIA HV LUNA    │◄───────────────►│  HUAWEI SUN2000-10KTL-M1    │────────►│  RETE ENEL          │
-│  20 kWh (Buffer 95%) │                 │  Trifase Grid-Tied On-Grid  │         │  (Smart Meter DTSU)  │
-└──────────────────────┘                 └──────────────┬──────────────┘         └──────────────────────┘
-                                                        │ AC-IN Pass-Through
-                                                        ▼
-                                         ┌─────────────────────────────┐
-                                         │  DATOUBOSS DT4811B (11 kW)  │◄────────┐
-                                         │  Monofase Off-Grid ad Isola │         │ DC
-                                         └──────────────┬──────────────┘         │
-                                                        │ AC-OUT           ┌─────┴────────────────┐
-                                                        ▼                  │ PV PERGOLA: 11.05kWp │
-                                         ┌─────────────────────────────┐   │ (2x Stringhe 320V)   │
-                                         │  🏠 CARICHI DI CASA         │   └──────────────────────┘
-                                         │  (Clima, PDC, Auto, Carichi)│
-                                         └──────────────┬──────────────┘
-                                                        ▲
-                                         ┌──────────────┴──────────────┐
-                                         │  BATTERIA HUMSIENK 48V LV   │
-                                         │  16 kWh LiFePO4 (UPS Isola) │
-                                         └─────────────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│             1. Ingestione Hardware Eterogenea          │
+│   • Huawei Modbus-TCP (192.168.200.1:6607)             │
+│   • Datouboss Seriale RS232 / PI30 (2400 baud CRC-16)  │
+│   • Wallbox EV Tuya Local (192.168.10.231)             │
+│   • Clima & VMC Fantini Cosmi (Sensori PM2.5, T_oda)   │
+│   • Previsioni Satellitari Solcast + Prezzi GME PUN    │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│             2. Single Source of Truth (SSOT)           │
+│   • ConfigManager: Lock kernel fcntl + scrittura atomica│
+│   • SystemStateHub: Normalizzazione fisica in memoria  │
+│   • Physical Safety Envelope: Vincoli termoelettrici   │
+└───────────────┬────────────────────────┬───────────────┘
+                │                        │
+                ▼                        ▼
+┌──────────────────────────┐  ┌──────────────────────────┐
+│  solar-planner.service   │  │    solar-web.service     │
+│  • HiGHS MILP 48h Solver │  │  • Real-Time SSE Stream  │
+│  • Co-Ottimizzazione EV  │  │  • React 18 SPA Cockpit  │
+└──────────────────────────┘  └──────────────────────────┘
 ```
 
-### Ostacoli Superati sul Campo
-
-1. **Ground Loop & Isolamento Galvanico:** Il disaccoppiamento tra il potenziale di terra di rete e il negativo delle batterie a 48V ha causato la vaporizzazione iniziale di un cavo seriale per correnti di massa vaganti. Risolto integrando un circuito optoisolato galvanico industriale.
-2. **Reverse-Engineering & Hacking della Chiavetta Wi-Fi:** La chiavetta ufficiale inviava pacchetti a server esteri con ritardi mostruosi e vietava comandi locali. È stata dissaldata e riprogrammata con firmware custom per esporre un socket TCP raw (`socket://192.168.10.132:8888`) a 2400 baud, portando il campionamento a 2 secondi con latenza <5 ms.
-3. **Doppio Protocollo Locale con Validazione CRC16:** Driver Modbus-TCP ad alta frequenza per Huawei e parser Voltronic PI30 con verifica matematica rigorosa del CRC16 a 2 byte per Datouboss.
-4. **Copilota IA su Proxmox:** Modulo di supervisione e ottimizzazione neuro-simbolica che incrocia le previsioni meteo satellitari Solcast + DWD ICON-D2 con la curva di carico per anticipare o ritardare l'avvio delle pompe di calore e la ricarica degli accumulatori.
+1. **`ConfigManager` Autorativo:** Garantisce scritture atomiche su file system (`os.replace`) con locking a livello di kernel Linux (`fcntl.flock`) per eliminare ogni rischio di corruzione JSON in caso di riavvio improvviso.
+2. **`SystemStateHub`:** Riceve e normalizza tutti i canali hardware eterogenei, calcola lo stato della **batteria combinata reale (36 kWh)**, applica il safe-zero defaulting per le letture che diventano stale e distribuisce snapshot immutabili agli altri microservizi con latenza inferiore a 1 millisecondo.
+3. **Physical Safety Envelope:** Involucro di protezione invalicabile dal software che impone limiti fisici invalicabili su correnti massime, temperature delle celle e soglie di scarica profonda.
 
 ---
 
-## La Nuova Architettura IASolar OS v2.0 (Microservizi & Layer 3 ML)
+## Snippet di Codice: Calcolo CRC16 e Driver Seriale PI30
 
-A settembre 2026 l'intero sistema è stato evoluto in un'architettura enterprise a **3 microservizi disaccoppiati** in esecuzione su Proxmox VE LXC CT 110:
-- **`solar-core.service`**: Polling hardware ad alta frequenza (Huawei Modbus + Datouboss seriale), FSM di sicurezza a 4 stadi, calcolo del bilanciamento istantaneo e attuazione deterministica protetta da watchdog hardware.
-- **`solar-planner.service`**: Ottimizzatore globale convesso **HiGHS MILP 48h**, interpolazione meteo satellitare, risoluzione prezzi PUN/ARERA e briefing vocale proattivo (VOX-01).
-- **`solar-web.service`**: API REST FastAPI/Flask e SPA reattiva React 18 con streaming real-time SSE e bus MQTT Mosquitto.
+Il protocollo seriale Datouboss PI30 impiega un checksum ciclico proprietario a 2 byte per convalidare ogni comando e ogni stringa di telemetria. Ecco la funzione ottimizzata in `core/datouboss_driver.py`:
 
-### I 4 Pilastri di Intelligenza & Resilienza
+```python
+def calc_crc(cmd: bytes) -> bytes:
+    """
+    Calcola il checksum CRC-16 per i frame del protocollo Voltronic PI30.
+    I caratteri speciali di controllo (CR, LF, '(') vengono traslati di 1 byte.
+    """
+    crc = 0
+    for b in cmd:
+        crc = ((crc << 8) | (crc >> 8)) & 0xFFFF
+        crc ^= b
+        crc ^= (crc & 0xFF) >> 4
+        crc ^= (crc << 12) & 0xFFFF
+        crc ^= ((crc & 0xFF) << 5) & 0xFFFF
+    crc &= 0xFFFF
+    
+    b1 = (crc >> 8) & 0xFF
+    b2 = crc & 0xFF
+    
+    # Escape dei caratteri riservati di framing PI30
+    if b1 in (0x0A, 0x0D, 0x28): 
+        b1 += 1
+    if b2 in (0x0A, 0x0D, 0x28): 
+        b2 += 1
+        
+    return bytes([b1, b2])
+```
 
-1. **Baseload Learner (ML Closed-Loop)**: Algoritmo di regressione continua su SQLite (`hourly_stats` a 30 giorni) che clusterizza separatamente le curve di consumo orario feriali e festive con mediana al 20% anti-outlier, alimentando il solver MILP con la domanda reale e non con stime statiche.
-2. **Digital Twin Termodinamico Involucro & Batterie**: Modello termico $1R-1C$ calibrato sulle sessioni di coasting passivo della villa ($\frac{dT_{in}}{dt} = \frac{1}{\tau} (T_{oda} - T_{in})$) che stima una costante inerziale reale $\tau \approx 51.0\text{ ore}$ per l'edificio di Lariano e monitora l'efficienza di accumulo ($\eta_{\text{LUNA}} \approx 92\%$, $\eta_{\text{Humsi}} \approx 88\%$).
-3. **Decision Engine System 1 Jev-like (<1 ms)**: One-Pass Option Scorer a 128 dimensioni operante in **Shadow Mode** ogni 30 secondi con latenza di soli **0.24 millisecondi**, fornendo il ranking probabilistico in tempo reale delle strategie ottimali di autoconsumo, volano e travaso.
-4. **NILM Engine Fine-Tuning & Disaster Recovery**: Disaggregazione dei carichi senza sensori con filtro di soppressione rumore inverter ($\pm 45\text{W}$) e debounce anti-flapping (45s). Hot-backup atomico SQLite WAL giornaliero compresso del **94.8%** (da 153 MB a 8 MB) sincronizzato via SFTP su host Proxmox con timer systemd notturno alle 03:30.
+---
 
-## Risultati Operativi
+![Mobilità Elettrica & Allocazione Dinamica Carica EV](/images/projects/dashboard-solare/screen_1_mobilita_ev.png)
 
-- Autoconsumo reale superiore al 92% annuo.
-- Protezione totale da blackout tramite commutazione istantanea off-grid UPS (<15ms).
-- Zero allucinazioni: vincoli fisici immutabili (Physical Safety Envelope) e test suite continua a **164/164 test verdi (100%)**.
-- Totale sovranità sui dati: nessuna dipendenza da cloud esterni.
+## Ottimizzazione Globale HiGHS MILP & Co-Ottimizzazione EV
 
-## Changelog / Diario di Bordo
+A differenza dei semplici relè a soglia, la SolarDashboard incorpora un pianificatore matematico orario ad anello chiuso basato su programmazione lineare a variabili intere miste (**MILP** con solutore open source **HiGHS**):
 
-- **[20/09/2026] Release IASolar OS v2.0 & 4 Pilastri Evolutivi**:
-  - Audit completo di produzione risolto al 100% (P0, P1, P2, P3: 35/35 remediation).
-  - Rilascio del Baseload Learner ML e del Gemello Digitale Involucro/Batterie ($\tau = 51\text{h}$).
-  - Attivazione in produzione del motore decisionale System 1 Jev-like in Shadow Mode (latenza 0.24ms).
-  - Deploy timer notturno systemd `solar-backup.timer` e validazione 164/164 test unitari.
-- **[20/09/2026] Configurazione Regola Globale Antigravity**: Attivato il tracciamento e aggiornamento continuo dei progressi sul blog e portfolio.
+* **Water-Filling Budget Allocator:** Bilancia istante per istante il surplus solare tra la ricarica dell'auto elettrica e le pompe di calore:
+  $$P_{\text{ev\_budget}} + P_{\text{th\_budget}} \le P_{\text{avail\_surplus}} + P_{\text{bess\_boost}}$$
+* **Cannibalizzazione Predittiva:** Se il solutore sa con certezza statistica (previsioni Solcast) che il sole del primo pomeriggio genererà oltre 30 kWh, autorizza l'auto a prelevare energia dalle batterie stazionarie al mattino presto, garantendo che le batterie tornino comunque al 100% prima del tramonto.
+* **Modello Inerziale dell'Edificio:** Modello termodinamico $1R-1C$ con costante di tempo $\tau \approx 51\text{h}$ per preriscaldare la casa nelle ore a PUN basso o surplus elevato, trasformando la massa muraria in un accumulatore termico gratuito.
+
+![Planner HiGHS MILP 48h con Solcast](/images/projects/dashboard-solare/screen_3_planner.png)
+
+---
+
+## Cockpit Fisico ESP32-P4 & Risultati sul Campo
+
+* **Cockpit Touch Dedicato:** Oltre alla Web UI accessibile da smartphone e PC, il sistema invia stream JPEG compressi via rete locale a un display touch da banco basato sul nuovo microcontrollore **ESP32-P4** con interfaccia grafica vettoriale LVGL.
+* **Autoconsumo Reale:** Superiore al **92% su base annua**, con autosufficienza energetica quasi totale da marzo a ottobre.
+* **Resilienza Totale:** Oltre 160 test unitari continui eseguiti ad ogni aggiornamento e hot-backup atomico notturno compresso su host Proxmox ZFS.

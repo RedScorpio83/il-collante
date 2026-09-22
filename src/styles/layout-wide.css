@@ -147,3 +147,22 @@
     max-width: 74ch;
   }
 }
+
+/* 8. Logo nella testata */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 38px;
+  height: 26px;
+  flex-shrink: 0;
+  overflow: visible;
+  transition: transform 0.25s cubic-bezier(0.3, 0.6, 0.3, 1);
+}
+
+.brand:hover .brand-logo {
+  transform: scale(1.08) translateY(-1px);
+}

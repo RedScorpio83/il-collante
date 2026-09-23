@@ -15,9 +15,9 @@ Il risultato finale, misurato scientificamente su un set di test reale, parla ch
 
 | Metrica Chiave | Prima (Proposta Standard IA) | Dopo (Architettura Umano-IA) | Risultato |
 | :--- | :---: | :---: | :---: |
-| **Token Inviati all'IA** | $\sim 81.850$ token | **11.354 token** | **-86,1% di token** |
-| **Latenza Totale Batch (12 PDF)** | $\sim 27,6$ secondi | **5,95 secondi** | **+364% più veloce** |
-| **Tempo per File Successivi** | $\sim 2,3\text{s}$ a file | **$\sim 0,0005\text{s}$ (sub-millisecondo)** | **Quasi istantaneo** |
+| **Token Inviati all'IA** | ~81.850 token | **11.354 token** | **-86,1% di token** |
+| **Latenza Totale Batch (12 PDF)** | ~27,6 secondi | **5,95 secondi** | **+364% più veloce** |
+| **Tempo per File Successivi** | ~2,3 s a file | **~0,0005 s (sub-millisecondo)** | **Quasi istantaneo** |
 | **Accuratezza Contabile & GDPR** | Rischio leak & falsi positivi | **100% garantito a codice** | **Zero rischi** |
 
 Ecco l'anatomia completa di come abbiamo ottenuto questi numeri, la ripartizione dei compiti e perché l'IA produce eccellenza solo quando è vincolata da una guida umana esperta.
@@ -34,9 +34,9 @@ Mettendo a confronto la proposta iniziale generata dall'assistente IA con l'arch
 | :--- | :--- | :--- | :--- |
 | **Metodologia di Lavoro** | Modifiche dirette al codice di produzione ed analisi in-line. | **"NON agire, studiamo prima"**: creazione di un sandbox di test isolato su 12 PDF reali. | **Zero rischi di regressione:** ha protetto il server di produzione durante tutti i test. |
 | **Gestione Batch Multi-File** | Chiamate IA sequenziali file per file con caching semplice (che si sovrascriveva tra Luce e Gas). | **Pipeline a 4 Stadi con Bucketing Preventivo:** classificazione client in *Luce*, *Gas*, *Duale* prima di qualsiasi chiamata. | **Eliminazione chiamate ridondanti:** da 12 chiamate IA a **sole 3 chiamate totali per batch**. |
-| **Payload Inviato all'IA** | Invio del testo del PDF quasi integrale ($\sim 6.800$ token per bolletta). | **Filtering AGGRESSIVO3:** deduplicazione header, whitelist contabile e word-level pruning delle frasi burocratiche. | **Abbattimento dell'86,1% dei token:** da 81.849 token totali a soli 11.354 inviati alla rete. |
+| **Payload Inviato all'IA** | Invio del testo del PDF quasi integrale (~6.800 token per bolletta). | **Filtering AGGRESSIVO3:** deduplicazione header, whitelist contabile e word-level pruning delle frasi burocratiche. | **Abbattimento dell'86,1% dei token:** da 81.849 token totali a soli 11.354 inviati alla rete. |
 | **Algoritmo di Categorizzazione** | Regex generica su tutto il documento (con falsi positivi causati dalle pubblicità a piè di pagina). | **Categorizzazione sull'Header di Pagina 1-2:** rilevamento mirato delle sole etichette contabili reali. | **Accuratezza al 100%:** azzerato l'errore per cui bollette Luce con promozioni venivano scambiate per Gas. |
-| **Latenza Complessiva Batch** | $\sim 27,6$ secondi di attesa utente. | **5,95 secondi totali** ($\sim 0,0005\text{s}$ per i file successivi al primo grazie alla Fase 2 locale). | **+364% più veloce** (riduzione dell'attesa utente del 78,4%). |
+| **Latenza Complessiva Batch** | ~27,6 secondi di attesa utente. | **5,95 secondi totali** (~0,0005 s per i file successivi al primo grazie alla Fase 2 locale). | **+364% più veloce** (riduzione dell'attesa utente del 78,4%). |
 | **Garanzia GDPR e Privacy** | Affidata all'istruzione testuale nel prompt dell'IA (*"ignora i dati personali"*). | **Stripping Tassativo lato Client:** eliminazione preventiva a codice di POD, PDR, Codice Fiscale, IBAN e Nomi. | **Privacy by Design:** garanzia matematica che nessun dato sensibile viaggi in rete. |
 
 ---
@@ -54,7 +54,7 @@ Se ti limiti a usare l'IA come una scatola magica a cui delegare le decisioni, o
    * **Stadio 3 (IA Vision):** Interrogazione dell'IA **solo sul primo documento** per estrarre lo schema geometrico e testuale delle ancore (`patternSchema`).
    * **Stadio 4 (Deterministico):** Estrazione locale fulminea a codice per tutti i successivi documenti del fornitore a costo token zero.
 3. **Direzione Progressiva dell'Ottimizzazione:**  
-   Invece di accontentarsi del primo risultato, ho guidato l'ottimizzazione del testo attraverso quattro livelli di potatura crescente: *Non Aggressiva* $\to$ *Aggressivo 1* $\to$ *Aggressivo 2* $\to$ *Aggressivo 3*, verificando ad ogni step che nessun campo contabile ARERA venisse cancellato per errore.
+   Invece di accontentarsi del primo risultato, ho guidato l'ottimizzazione del testo attraverso quattro livelli di potatura crescente: *Non Aggressiva* → *Aggressivo 1* → *Aggressivo 2* → *Aggressivo 3*, verificando ad ogni step che nessun campo contabile ARERA venisse cancellato per errore.
 4. **Individuazione dell'Anomalia Subdola:**  
    Durante i test, una bolletta elettrica veniva classificata come gas metano. L'IA non capiva il motivo. Analizzando il testo grezzo ho notato che nel footer promozionale a pagina 6 c'era la scritta *"Scopri le nostre offerte Gas"*. Ho imposto all'IA la regola di escludere il corpo del documento e analizzare **esclusivamente il blocco contabile delle prime due pagine**.
 5. **Pretesa del Ground Truth Certificato:**  

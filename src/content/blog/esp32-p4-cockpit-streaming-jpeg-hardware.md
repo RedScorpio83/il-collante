@@ -58,9 +58,9 @@ Durante i primi test con il decoder hardware, lo schermo mostrava artefatti viol
 
 Studiando i registri interni del chip abbiamo scoperto il motivo: **l'hardware decoder dell'ESP32-P4 richiede che larghezza e altezza del frame siano multipli esatti della MCU (Minimum Coded Unit), ovvero 16 pixel.**
 
-La risoluzione nativa del display era $1024 \times 600$:
-* $1024 / 16 = 64$ (Perfetto, multiplo intero).
-* $600 / 16 = 37.5$ (Non intero! Il decoder generava un buffer corrotto).
+La risoluzione nativa del display era 1024 × 600:
+* 1024 / 16 = 64 (Perfetto, multiplo intero).
+* 600 / 16 = 37.5 (Non intero! Il decoder generava un buffer corrotto).
 
 È bastato configurare il canvas di cattura virtuale a **1024×608 pixel** (multiplo esatto di 16) e ritagliare le 8 righe nere invisibili a livello di sincronizzazione hardware per ottenere un'immagine nitida al pixel.
 
@@ -70,11 +70,11 @@ La risoluzione nativa del display era $1024 \times 600$:
 
 | Parametro Operativo | Streaming VNC Tradizionale | Pipeline JPEG Hardware ESP32-P4 | Miglioramento |
 | :--- | :---: | :---: | :---: |
-| **Banda di Rete Locale** | $\sim 31.5\text{ MB/s}$ | **$0.88\text{ MB/s}$** | **-97.2% di traffico** |
-| **Tempo di Decodifica Frame** | $\sim 185\text{ ms}$ (software) | **$6.5\text{ ms}$ (hardware DMA)** | **28 volte più veloce** |
-| **Frame Rate Effettivo** | $2.5\text{ FPS}$ (a scatti) | **$20.0\text{ FPS}$ (fluido)** | **+700% di fluidità** |
-| **Latenza del Tocco Touch** | $\sim 1500\text{ ms}$ | **$< 45\text{ ms}$** | **Reattività istantanea** |
-| **Carico CPU Microcontrollore** | $98\%$ (surriscaldamento) | **$18\%$ (core freddo)** | **Silicio a riposo** |
+| **Banda di Rete Locale** | ~31,5 MB/s | **0,88 MB/s** | **-97,2% di traffico** |
+| **Tempo di Decodifica Frame** | ~185 ms (software) | **6,5 ms (hardware DMA)** | **28 volte più veloce** |
+| **Frame Rate Effettivo** | 2,5 FPS (a scatti) | **20,0 FPS (fluido)** | **+700% di fluidità** |
+| **Latenza del Tocco Touch** | ~1500 ms | **< 45 ms** | **Reattività istantanea** |
+| **Carico CPU Microcontrollore** | 98% (surriscaldamento) | **18% (core freddo)** | **Silicio a riposo** |
 
 ---
 

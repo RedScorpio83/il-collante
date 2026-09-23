@@ -111,7 +111,7 @@ Rispondi ESCLUSIVAMENTE con un JSON valido:
 I dati estratti dalle bollette confluiscono nel motore di simulazione energetica:
 
 1. **Deanonymizer Tariffario:** Riconosce la formula contrattuale reale (es. *PUN Orario + Spread*, *Tariffa Fissa Bloccata*, *Monoraria vs Multioraria*).
-2. **Dimensionamento Fotovoltaico & Batterie:** Simula l'effetto di diverse potenze di picco ($kWp$) e capacità di accumulo ($kWh$ LiFePO4) applicate alla curva di carico oraria reale dell'utente, calcolando il tempo di ammortamento al centesimo.
+2. **Dimensionamento Fotovoltaico & Batterie:** Simula l'effetto di diverse potenze di picco (kWp) e capacità di accumulo (kWh LiFePO4) applicate alla curva di carico oraria reale dell'utente, calcolando il tempo di ammortamento al centesimo.
 3. **Simulazione Pompa di Calore (PDC) & Climatizzazione:** Stima il coefficiente COP orario basato sulla temperatura climatica locale per calcolare l'impatto economico dell'abbandono del gas metano.
 
 ![Inverter and Storage Hub](/images/projects/energylife/inverter-storage-hub.webp)

@@ -127,7 +127,7 @@ Con la crescita dell'impianto e l'aggiunta di carichi critici (pompa di calore, 
 2. **Baseload Learner (Closed-Loop Machine Learning)**:
    - Sostituito il carico statico ipotizzato con un algoritmo che analizza le letture orarie SQLite degli ultimi 30 giorni, separando automaticamente i profili feriali (486W medi) da quelli festivi (539W medi) con mediana al 20% anti-outlier. Il solver MILP 48h pianifica ora su dati reali.
 3. **Gemello Digitale Involucro & Rendimenti**:
-   - Modello termodinamico $1R-1C$ che sfrutta le ore di coasting passivo a split spenti per calcolare la costante inerziale della villa ($\tau \approx 51.0\text{ ore}$), monitorando costantemente l'efficienza di accumulo ($\eta_{\text{LUNA}} \approx 92\%$, $\eta_{\text{Humsi}} \approx 88\%$).
+   - Modello termodinamico 1R-1C che sfrutta le ore di coasting passivo a split spenti per calcolare la costante inerziale della villa ($\tau \approx 51{,}0\text{ ore}$), monitorando costantemente l'efficienza di accumulo ($\eta_{\text{LUNA}} \approx 92\%$, $\eta_{\text{Humsi}} \approx 88\%$).
 4. **Motore Decisionale System 1 Jev-like (<1 ms)**:
    - One-Pass Option Scorer a 128 dimensioni in esecuzione come osservatore silenzioso (*Shadow Mode*) ogni 30 secondi: calcola il ranking vettoriale probabilistico delle strategie di gestione in soli **0.24 millisecondi**, senza costi di token né latenze di rete.
 5. **Audit di Produzione & Disaster Recovery**:

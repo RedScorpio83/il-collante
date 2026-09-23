@@ -12,9 +12,9 @@ Avendo a disposizione un impianto con 36 kWh di batterie stazionarie, ci siamo c
 C'è un momento preciso, quando sviluppi un sistema di automazione energetica, in cui la semplice logica reattiva non basta più. 
 
 La logica reattiva è quella standard:
-* *C'è il sole e il contatore immette 2.0 kW in rete?* $\to$ Accendi la pompa di calore o fai partire la ricarica dell'auto elettrica.
-* *Passa una nuvola per 5 minuti e l'immissione si azzera?* $\to$ Spegni tutto all'istante, stacca il compressore, azzera la Wallbox a 0A.
-* *Torna il sole?* $\to$ Riavvia tutto.
+* *C'è il sole e il contatore immette 2.0 kW in rete?* → Accendi la pompa di calore o fai partire la ricarica dell'auto elettrica.
+* *Passa una nuvola per 5 minuti e l'immissione si azzera?* → Spegni tutto all'istante, stacca il compressore, azzera la Wallbox a 0A.
+* *Torna il sole?* → Riavvia tutto.
 
 Se avete un'auto elettrica o una pompa di calore, sapete esattamente cosa succede: la Wallbox si blocca o riparte da zero, i contattori meccanici sbattono continuamente e il compressore dell'aria condizionata subisce uno stress termico e meccanico devastante.
 
@@ -118,12 +118,12 @@ $$\eta_{\text{tot}} = 0.85 \times 0.73 \approx 62\%$$
 State letteralmente buttando via quasi il 40% dell'energia in calore!
 
 Abbiamo quindi implementato la **curva di efficienza dinamica dell'OBC** nel modulo di surplus:
-* **6A (1.38 kW):** Efficienza $73\%$.
-* **10A (2.30 kW):** Efficienza $79\%$.
-* **16A (3.68 kW):** Efficienza $84\%$.
-* **32A (7.36 kW):** Efficienza $>87\%$.
+* **6A (1.38 kW):** Efficienza 73%.
+* **10A (2.30 kW):** Efficienza 79%.
+* **16A (3.68 kW):** Efficienza 84%.
+* **32A (7.36 kW):** Efficienza > 87%.
 
-**La decisione dell'HEMS:** quando si decide di cannibalizzare la batteria stazionaria con $E_{\text{free}}$, il sistema **evita i 6A** e spinge preferenzialmente a **$\ge 10\text{A}-16\text{A}$**, dove l'OBC lavora al massimo della sua resa termodinamica.
+**La decisione dell'HEMS:** quando si decide di cannibalizzare la batteria stazionaria con $E_{\text{free}}$, il sistema **evita i 6A** e spinge preferenzialmente a **≥ 10A - 16A**, dove l'OBC lavora al massimo della sua resa termodinamica.
 
 ---
 
@@ -136,17 +136,17 @@ A questo punto avevamo un quadro chiaro: in casa non abbiamo "una batteria e dei
 | **1. Huawei LUNA2000** | 20.0 kWh (LiFePO4 HV) | Modbus TCP (Porta 6607) | 100% (o cut-off hardware 90%) entro il tramonto |
 | **2. Datouboss HumsiENK** | 16.0 kWh (LiFePO4 48V) | Seriale RS232 PI30 | Raggiungimento soglia Float (54.0V) senza clipping solare |
 | **3. EV Dacia Spring** | 26.8 kWh (Trazione) | Tuya Local DPS + HA | Target SoC desiderato prima dell'orario di partenza |
-| **4. Volano Termico Casa** | $\tau = 65\text{h}$, $H_{\text{tr}} = 84.6\text{W/K}$ | Submetering PZEM Ch2 + Sensori HA | Accumulo termico nelle pareti sfruttando ore ad alto COP |
+| **4. Volano Termico Casa** | τ = 65h, $H_{\text{tr}} = 84{,}6\text{ W/K}$ | Submetering PZEM Ch2 + Sensori HA | Accumulo termico nelle pareti sfruttando ore ad alto COP |
 
 Il nuovo modulo `MultiBatterySaturationTracker` calcola in tempo reale il tempo a saturazione $t_{\text{full}}$ per tutti e 4 i vettori.
 
 ### L'Inerzia della Casa: Una Batteria Termica da 65 Ore
-La nostra calibrazione sperimentale dell'edificio ha dimostrato che la casa ha una costante di tempo termica di **$\tau = 65.0\text{ ore}$** e una trasmittanza globale di $H_{\text{tr}} = 84.6\text{ W/K}$.
-Significa che se spegnete il riscaldamento o l'aria condizionata durante un transitorio nuvoloso di 30 minuti, la temperatura interna cala (o sale) di meno di **$0.04^\circ\text{C}$**!
+La nostra calibrazione sperimentale dell'edificio ha dimostrato che la casa ha una costante di tempo termica di **$\tau = 65{,}0\text{ ore}$** e una trasmittanza globale di $H_{\text{tr}} = 84{,}6\text{ W/K}$.
+Significa che se spegnete il riscaldamento o l'aria condizionata durante un transitorio nuvoloso di 30 minuti, la temperatura interna cala (o sale) di meno di **0,04 °C**!
 
 Allo stesso tempo, il coefficiente di prestazione ($COP$) della nostra pompa di calore (monitorata dal canale submetering dedicato PZEM Ch2) varia con la temperatura esterna:
-* In inverno a $2^\circ\text{C}$ di notte: $COP \approx 2.7$.
-* Nel primo pomeriggio a $15^\circ\text{C}$: $COP > 4.2$.
+* In inverno a 2 °C di notte: $COP \approx 2{,}7$.
+* Nel primo pomeriggio a 15 °C: $COP > 4{,}2$.
 
 Sfruttare $E_{\text{free}}$ della batteria alle due del pomeriggio per saturare il volano termico delle pareti al doppio dell'efficienza è mille volte più intelligente che scaldare la casa di notte a basso COP.
 

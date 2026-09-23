@@ -13,7 +13,7 @@ In questa guida documentiamo il reverse engineering completo di un'unità **Fant
 
 ## 1. La Macchina & L'Obiettivo del Progetto
 
-La Fantini Cosmi AP19802 è un'unità a doppio flusso fino a $210\text{ m}^3/\text{h}$, dotata di scambiatore in controcorrente e serranda motorizzata di by-pass per il freecooling. 
+La Fantini Cosmi AP19802 è un'unità a doppio flusso fino a 210 m³/h, dotata di scambiatore in controcorrente e serranda motorizzata di by-pass per il freecooling. 
 
 Di serie, l'unico controllo era un selettore a manopola. Volevamo trasformarla in un nodo attivo dell'ecosistema energetico domestico con queste capacità:
 1. **Velocità 3 Boost Automatica:** Aumentare il ricambio d'aria al massimo quando c'è surplus solare sui pannelli fotovoltaici.
@@ -61,7 +61,7 @@ Installando 4 sonde impermeabili digitali **DS18B20** direttamente all'interno d
 
 $$\eta_{\text{rec}} = \frac{T_{\text{immissione}} - T_{\text{esterno}}}{T_{\text{ripresa}} - T_{\text{esterno}}} \times 100$$
 
-Nelle giornate invernali fredde con $T_{\text{esterno}} = 4^\circ\text{C}$ e aria interna a $21^\circ\text{C}$, lo scambiatore immette aria preriscaldata a oltre $18.5^\circ\text{C}$, certificando un'efficienza sul campo costantemente compresa tra l'**86% e l'89%**.
+Nelle giornate invernali fredde con $T_{\text{esterno}} = 4\text{ °C}$ e aria interna a 21 °C, lo scambiatore immette aria preriscaldata a oltre 18,5 °C, certificando un'efficienza sul campo costantemente compresa tra l'**86% e l'89%**.
 
 ---
 

@@ -31,7 +31,7 @@ La soluzione non era rendere il container insicuro (*privileged*), ma isolare il
 
 ## 2. L'Architettura IPC a Zero Latenza (`/dev/shm`)
 
-Invece di far compiere alle metriche il percorso tortuoso *Python $\to$ Socket TCP HTTP $\to$ Chromium Network Process $\to$ JavaScript Fetch $\to$ DOM*, abbiamo creato un ponte diretto attraverso la memoria RAM del container:
+Invece di far compiere alle metriche il percorso tortuoso *Python → Socket TCP HTTP → Chromium Network Process → JavaScript Fetch → DOM*, abbiamo creato un ponte diretto attraverso la memoria RAM del container:
 
 ```text
 ┌────────────────────────────────────────────────────────┐

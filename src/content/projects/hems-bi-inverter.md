@@ -103,7 +103,7 @@ A differenza dei semplici relè a soglia, la SolarDashboard incorpora un pianifi
 * **Water-Filling Budget Allocator:** Bilancia istante per istante il surplus solare tra la ricarica dell'auto elettrica e le pompe di calore:
   $$P_{\text{ev\_budget}} + P_{\text{th\_budget}} \le P_{\text{avail\_surplus}} + P_{\text{bess\_boost}}$$
 * **Cannibalizzazione Predittiva:** Se il solutore sa con certezza statistica (previsioni Solcast) che il sole del primo pomeriggio genererà oltre 30 kWh, autorizza l'auto a prelevare energia dalle batterie stazionarie al mattino presto, garantendo che le batterie tornino comunque al 100% prima del tramonto.
-* **Modello Inerziale dell'Edificio:** Modello termodinamico $1R-1C$ con costante di tempo $\tau \approx 51\text{h}$ per preriscaldare la casa nelle ore a PUN basso o surplus elevato, trasformando la massa muraria in un accumulatore termico gratuito.
+* **Modello Inerziale dell'Edificio:** Modello termodinamico 1R-1C con costante di tempo $\tau \approx 51\text{ ore}$ per preriscaldare la casa nelle ore a PUN basso o surplus elevato, trasformando la massa muraria in un accumulatore termico gratuito.
 
 ![Planner HiGHS MILP 48h con Solcast](/images/projects/dashboard-solare/screen_3_planner.png)
 

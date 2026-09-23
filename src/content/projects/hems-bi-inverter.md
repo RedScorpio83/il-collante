@@ -8,7 +8,7 @@ featured: true
 githubUrl: "https://github.com/RedScorpio83"
 ---
 
-![Dashboard Solare: Sinottico Flussi Real-Time](/images/projects/dashboard-solare/screen_0_sinottico.png)
+![Dashboard Solare: Control Room SCADA Panoramica](/images/projects/dashboard_scada_panoramica.jpg)
 
 ## Il Contesto Fisico: Unire Due Inverter Incompatibili
 
@@ -23,7 +23,7 @@ Nessun software commerciale al mondo è in grado di far cooperare queste due mac
 
 ---
 
-![Schema SCADA Unifilare Centrale](/images/projects/dashboard-solare/scada_unifilar_diagram.png)
+![Schema SCADA Unifilare e JEV System 1 Decision Engine](/images/projects/dashboard_jev_decision_engine.jpg)
 
 ## L'Architettura Software: Single Source of Truth (SSOT)
 
@@ -94,7 +94,7 @@ def calc_crc(cmd: bytes) -> bytes:
 
 ---
 
-![Mobilità Elettrica & Allocazione Dinamica Carica EV](/images/projects/dashboard-solare/screen_1_mobilita_ev.png)
+![Gestione Carichi e Contratti di Flessibilità](/images/projects/dashboard_carichi.jpg)
 
 ## Ottimizzazione Globale HiGHS MILP & Co-Ottimizzazione EV
 
@@ -105,7 +105,20 @@ A differenza dei semplici relè a soglia, la SolarDashboard incorpora un pianifi
 * **Cannibalizzazione Predittiva:** Se il solutore sa con certezza statistica (previsioni Solcast) che il sole del primo pomeriggio genererà oltre 30 kWh, autorizza l'auto a prelevare energia dalle batterie stazionarie al mattino presto, garantendo che le batterie tornino comunque al 100% prima del tramonto.
 * **Modello Inerziale dell'Edificio:** Modello termodinamico 1R-1C con costante di tempo $\tau \approx 51\text{ ore}$ per preriscaldare la casa nelle ore a PUN basso o surplus elevato, trasformando la massa muraria in un accumulatore termico gratuito.
 
-![Planner HiGHS MILP 48h con Solcast](/images/projects/dashboard-solare/screen_3_planner.png)
+![Planner HiGHS MILP 48h con Solcast](/images/projects/dashboard_highs_timeline_predittiva.jpg)
+
+---
+
+## Digital Twin & Simulazione Energetica Sandbox
+
+Per testare strategie complesse prima di applicarle all'hardware fisico, la piattaforma integra un **Gemello Digitale** completo:
+
+![Simulazione Sandbox 24h: Flussi di Potenza e Curve SOC](/images/projects/dashboard_digital_twin_curves.jpg)
+
+* **Calibrazione Involucro Termico:** Calcolo in tempo reale della costante $\tau = 65.0\text{h}$ e trasmittanza $H_{\text{tr}} = 84.6\text{ W/K}$ con stima del coasting termico sicuro fino a 360 minuti.
+* **Simulatore Scenari a 1440 Minuti:** Verifica l'impatto di nuvole improvvise, transitori della pompa di calore e ricarica dell'auto con tracciamento step-by-step ("Explainability").
+
+![Involucro Edificio Passivhaus & Stima Coasting](/images/projects/dashboard_involucro_passivhaus.jpg)
 
 ---
 

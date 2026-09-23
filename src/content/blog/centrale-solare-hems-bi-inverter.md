@@ -57,6 +57,8 @@ La nostra centrale energetica è una creatura ibrida, nata per unire il massimo 
    * **Inverter Datouboss DT4811B (11 kW)** (Monofase): Gestisce gli 11.05 kWp della Pergola bifacciale e il banco batterie a 48V **HumsiENK 16S LiFePO4 (16 kWh)**.
    * L'ingresso AC-IN del Datouboss è collegato all'uscita di Huawei; l'uscita AC-OUT alimenta l'intero quadro elettrico della casa. È la nostra "scialuppa di salvataggio UPS" che garantisce elettricità continua anche in caso di blackout di rete.
 
+![Sinottico Fisico SCADA della Centrale Ibrida Bi-Inverter](/images/projects/dashboard_jev_decision_engine.jpg)
+
 ---
 
 ## 2. Le Origini: Il Cavo Seriale Bruciato e l'Hacking del Dongle Cloud-Only
@@ -102,6 +104,8 @@ L'HEMS è un **sistema operativo energetico autonomo**:
 4. **ControllableDeviceManager:** Gestisce i carichi (clima, PDC, wallbox auto) con protezioni anti-cycling sul compressore (minimo 90s/180s) e rispetto degli override manuali dell'utente.
 5. **Livello di Sicurezza Deterministico (L0 Safety Clamp):** Nessuna proposta dell'Intelligenza Artificiale viene applicata se viola i vincoli fisici di potenza, amperaggio o riserva delle batterie.
 
+![Control Room SCADA: Flussi energetici, accumulatori e sicurezza C32](/images/projects/dashboard_scada_panoramica.jpg)
+
 ---
 
 ## 5. Il Fattore Umano: La Simbiosi Centauro
@@ -133,3 +137,5 @@ Con la crescita dell'impianto e l'aggiunta di carichi critici (pompa di calore, 
 5. **Audit di Produzione & Disaster Recovery**:
    - Risoluzione completa di 35 vulnerabilità e colli di bottiglia (P0-P3) con certificazione su **164/164 test unitari automatizzati continui**.
    - Backup a caldo SQLite con compressione del **94.8%** (da 153 MB a 8 MB) e timer systemd notturno programmato per le 03:30.
+
+![Timeline Predittiva HiGHS MILP 48h con Solcast e Prezzi PUN](/images/projects/dashboard_highs_timeline_predittiva.jpg)

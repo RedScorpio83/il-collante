@@ -46,6 +46,8 @@ Prendendo in prestito i concetti delle scienze cognitive, la gestione energetica
 1. **System 2 (Lento e Ragionato):** Ogni 60 minuti calcola il piano orario ideale per i due giorni successivi.
 2. **System 1 (Rapido e Reattivo):** Ogni 30 secondi esegue un ranking probabilistico tra diverse strategie (es. *EV Solar Divert*, *BESS Priority Storage*, *Thermal Inertia Flywheel*). Se le condizioni reali cambiano istantaneamente (una nuvola o un carico imprevisto), adatta l'allocazione in una frazione di millisecondo.
 
+![JEV-like System 1 Decision Engine: Ranking Opzioni e Closed-Loop](/images/projects/dashboard_jev_decision_engine.jpg)
+
 ---
 
 ## 2. Il Mistero del Registro Modbus 47081: La Batteria Bloccata
@@ -69,3 +71,5 @@ L'incubo di ogni ingegnere di automazione è un modello di intelligenza artifici
 * **Pulsante di Rollback Istantaneo:** Dalla dashboard o via API è possibile premere il Kill-Switch: in meno di **10 millisecondi** il motore System 1 viene isolato e il controllo torna al 100% alla FSM statica tradizionale.
 
 Con questa architettura ibrida, la flessibilità dell'Intelligenza Artificiale non è un rischio, ma uno strumento di precisione protetto dalle leggi invalicabili della fisica.
+
+![Copilota Energetico Intelligente NLP e Guardrail L0](/images/projects/dashboard_copilota_nlp.jpg)

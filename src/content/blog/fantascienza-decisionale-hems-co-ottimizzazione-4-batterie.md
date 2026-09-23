@@ -150,6 +150,8 @@ Allo stesso tempo, il coefficiente di prestazione ($COP$) della nostra pompa di 
 
 Sfruttare $E_{\text{free}}$ della batteria alle due del pomeriggio per saturare il volano termico delle pareti al doppio dell'efficienza è mille volte più intelligente che scaldare la casa di notte a basso COP.
 
+![Involucro Edificio Passivhaus: Costante Tau 65.0h e Trasmittanza H_tr](/images/projects/dashboard_involucro_passivhaus.jpg)
+
 ---
 
 ## 5. La Garanzia Matematica: Solcast Solar Recovery Margin
@@ -173,6 +175,8 @@ Il motore decisionale AI System 1 (Jev-like Scorer a sub-millisecondo) riceve il
 `STRATEGY_PREDICTIVE_BESS_CANNIBALIZATION_EV`
 
 L'auto carica a piena potenza, la nuvola passa inosservata grazie al cuscinetto BESS e alle 17:30 entrambe le batterie di casa sono regolarmente al 100%.
+
+![Timeline Predittiva HiGHS MILP 48h con Solcast e Prezzi PUN](/images/projects/dashboard_highs_timeline_predittiva.jpg)
 
 ---
 
@@ -199,3 +203,5 @@ Sul nostro container Proxmox CT 110 (`solar-hub`), il log live di `solar-core` t
 Niente più ricariche a singhiozzo. Niente più scatti parassiti della rete. Niente più energia solare sprecata a basso rendimento. 
 
 Quando la fisica dell'edificio, l'elettronica di potenza degli inverter e l'Intelligenza Artificiale decisionale si incontrano su una solida architettura locale, la casa smette di essere un semplice consumatore passivo: diventa una vera e propria **micro-centrale energetica autonoma e predittiva**.
+
+![Simulazione Sandbox 24h: Flussi di Potenza e Curve SOC](/images/projects/dashboard_digital_twin_curves.jpg)
